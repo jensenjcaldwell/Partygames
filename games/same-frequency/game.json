@@ -1,0 +1,11 @@
+{
+  "name": "Same Frequency",
+  "inspiredBy": "Wavelength",
+  "description": "Tune into each other’s minds. Give a clue, find the hidden spot on the dial, and see who’s on your wavelength.",
+  "icon": "📻",
+  "color": "#eaa25c",
+  "minPlayers": 3,
+  "maxPlayers": 12,
+  "lateJoin": false,
+  "music": "think"
+}
