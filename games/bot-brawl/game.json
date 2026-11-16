@@ -1,0 +1,10 @@
+{
+  "name": "Bot Brawl",
+  "inspiredBy": "RoboRally",
+  "description": "Program four moves, then watch your scrapyard robot shove, zap and tumble through a terrible factory. Race for flags or survive the night shift!",
+  "icon": "🤖",
+  "color": "#ffb547",
+  "minPlayers": 2,
+  "maxPlayers": 8,
+  "music": "factory"
+}

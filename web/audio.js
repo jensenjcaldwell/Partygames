@@ -62,6 +62,17 @@ function noise(t, dur, { vol = 0.3, from = 800, to = 4000, type = 'bandpass', bu
 }
 
 const SFX = {
+  // Press Conference: a short brass-style broadcast ident, then silence for speech.
+  'pc-fanfare': (t) => {
+    const notes = [[196, 0, .16], [261.63, .17, .16], [329.63, .34, .16], [392, .51, .3], [349.23, .85, .15], [392, 1.02, .65]];
+    for (const [f, offset, dur] of notes) {
+      tone(f, t + offset, dur, { type: 'sawtooth', vol: .15, filter: 1900, attack: .018 });
+      tone(f * 1.5, t + offset, dur, { type: 'triangle', vol: .11, attack: .018 });
+    }
+    [130.81, 164.81, 196, 261.63].forEach((f) => tone(f, t + 1.02, .95, { type: 'triangle', vol: .14, attack: .02 }));
+    [0, .17, .34, .51, .85].forEach((offset) => noise(t + offset, .08, { vol: .12, from: 2200, to: 1200 }));
+    noise(t + 1.02, .7, { vol: .2, from: 6000, to: 2500, type: 'highpass' });
+  },
   tick: (t) => { tone(2100, t, 0.05, { type: 'square', vol: 0.25 }); noise(t, 0.03, { vol: 0.2, from: 5000, to: 5000 }); },
   tock: (t) => { tone(1400, t, 0.06, { type: 'square', vol: 0.25 }); noise(t, 0.03, { vol: 0.2, from: 3000, to: 3000 }); },
   pop: (t) => tone(500, t, 0.12, { to: 1100, vol: 0.45 }),
@@ -80,6 +91,41 @@ const SFX = {
     for (let i = 0; i < 9; i++) tone(200 + Math.random() * 1800, t + i * 0.035, 0.04, { type: 'square', vol: 0.18 });
     noise(t + 0.1, 0.25, { vol: 0.25, from: 6000, to: 200 });
   },
+  // Bot Brawl: scrap-metal percussion, motors and wordless robot voices.
+  'bb-step': (t) => {
+    tone(165, t, 0.09, { type: 'triangle', to: 65, vol: 0.28 });
+    noise(t, 0.035, { vol: 0.13, from: 2000, to: 600 });
+  },
+  'bb-clank': (t) => {
+    [231, 487, 1139, 1973].forEach((f, i) => tone(f, t, 0.32 - i * 0.05, { vol: 0.19 / (i + 1), type: 'triangle' }));
+    noise(t, 0.08, { vol: 0.25, from: 4500, to: 750 });
+  },
+  'bb-whirr': (t) => {
+    tone(95, t, 0.3, { type: 'sawtooth', to: 230, vol: 0.09, filter: 1000 });
+    tone(192, t + 0.04, 0.26, { type: 'triangle', to: 460, vol: 0.08 });
+  },
+  'bb-zap': (t) => {
+    tone(1700, t, 0.17, { type: 'sawtooth', to: 110, vol: 0.12, filter: 2600 });
+    noise(t, 0.1, { vol: 0.13, from: 5000, to: 700 });
+  },
+  'bb-lock': (t) => {
+    [280, 560, 420].forEach((f, i) => tone(f, t + i * 0.05, 0.08, { type: 'square', vol: 0.11, filter: 1800 }));
+    noise(t + 0.14, 0.04, { vol: 0.12, from: 2000, to: 800 });
+  },
+  'bb-chirp': (t) => {
+    const root = [220, 294, 370][Math.floor(Math.random() * 3)];
+    [1, 1.5, 1.25, 2].forEach((r, i) => tone(root * r, t + i * 0.075, 0.1, { type: 'square', to: root * r * 1.15, vol: 0.1, filter: 1700 }));
+  },
+  'bb-cheer': (t) => {
+    [330, 495, 660, 990, 1320].forEach((f, i) => tone(f, t + i * 0.07, 0.19, { type: 'square', to: f * 1.12, vol: 0.12, filter: 2400 }));
+  },
+  'bb-wail': (t) => {
+    [680, 530, 390, 170].forEach((f, i) => tone(f, t + i * 0.09, 0.16, { type: 'sawtooth', to: f * 0.62, vol: 0.1, filter: 1400 }));
+    noise(t + 0.3, 0.25, { vol: 0.18, from: 2400, to: 150 });
+  },
+  'bb-rewind': (t) => {
+    [1300, 900, 1500, 600, 1000, 300].forEach((f, i) => tone(f, t + i * 0.045, 0.06, { type: 'triangle', to: f / 2, vol: 0.1 }));
+  },
 };
 
 export function sfx(name, delay = 0) {
@@ -95,6 +141,7 @@ const MOODS = {
   party: { bpm: 118, chords: [[62, 'm'], [58, 'M'], [53, 'M'], [60, 'M']], arp: [0, 2, 1, 3, 0, 2, 3, 1], drums: 'full' },
   think: { bpm: 84, chords: [[57, 'm'], [53, 'M'], [60, 'M'], [55, 'M']], arp: [0, null, 2, null, 1, null, 3, null], drums: 'soft' },
   tense: { bpm: 128, chords: [[57, 'm'], [57, 'm'], [58, 'M'], [56, 'd']], arp: [0, 0, 2, 0, 3, 0, 2, 1], drums: 'full' },
+  factory: { bpm: 112, chords: [[52, 'm'], [50, 'M'], [48, 'M'], [50, 'M']], arp: [0, null, 2, 1, null, 3, 1, null], drums: 'full' },
 };
 const QUAL = { M: [0, 4, 7, 12], m: [0, 3, 7, 12], d: [0, 3, 6, 12] };
 let mood = null, step = 0, nextT = 0, timer = null;
@@ -121,7 +168,11 @@ function schedule() {
     const iv = QUAL[q];
     const t = nextT;
     const opt = { bus: musicBus };
-    if (s === 0 || s === 4) tone(N(root - 24), t, eighth * 3.5, { ...opt, type: 'triangle', vol: 0.55, attack: 0.01 });
+    if (mood === 'factory') {
+      if ([0, 3, 5, 7].includes(s)) tone(N(root - 12 + (s === 5 ? 7 : 0)), t, eighth * (s === 0 ? 1.6 : .7), { ...opt, type: 'sawtooth', vol: 0.22, filter: 650, attack: 0.008 });
+      if (s === 2 || s === 6) [347, 811, 1729].forEach((f, i) => tone(f, t, 0.13 - i * 0.025, { ...opt, type: 'triangle', vol: 0.15 / (i + 1) }));
+      if (s === 7) noise(t, 0.1, { ...opt, vol: 0.08, from: 500, to: 1800, q: 3 });
+    } else if (s === 0 || s === 4) tone(N(root - 24), t, eighth * 3.5, { ...opt, type: 'triangle', vol: 0.55, attack: 0.01 });
     if (s === 0) iv.slice(0, 3).forEach((x) => tone(N(root + x), t, eighth * 7.5, { ...opt, type: 'sine', vol: 0.12, attack: 0.08 }));
     const a = M.arp[s];
     if (a != null) tone(N(root + 12 + iv[a]), t, eighth * 0.9, { ...opt, type: 'square', vol: 0.07, filter: 2200 });

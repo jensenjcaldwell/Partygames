@@ -1,0 +1,35 @@
+[
+  {
+    "title": "Welcome to the scrapyard",
+    "text": "2–8 bots clock in. Choose from six hazardous arenas, race for moving flags or survive the shrinking factory. Add computer opponents in shift settings.",
+    "scene": [{ "icon": "🤖", "label": "Your questionable machine", "fx": "float" }, { "tv": "FLAG RACE / SURVIVAL", "sub": "Choose your shift" }]
+  },
+  {
+    "title": "Four cards. One secret plan.",
+    "text": "On your phone, queue four movement or laser cards in order. Repeats are allowed. Tap a filled slot to remove it, then lock in.",
+    "scene": [{ "phone": "Program your bot", "buttons": ["Forward", "Turn right", "Laser"], "tap": 1 }, { "card": "↑ → ϟ ↑", "color": "#ffb547", "label": "Four program slots" }],
+    "flow": true
+  },
+  {
+    "title": "The factory moves on every beat",
+    "text": "Each beat: bots move, green arrows carry bots, then edge-mounted laser cannons fire. Dashed red lines preview their paths; the first bot or wall blocks each beam.",
+    "scene": [{ "icon": "🤖", "label": "Bots move" }, { "icon": "➡️", "label": "Belts roll" }, { "icon": "⚡", "label": "Factory lasers" }, { "tv": "REPEAT ×4" }],
+    "flow": true
+  },
+  {
+    "title": "Industrial-strength friendship testing",
+    "text": "Shove whole chains of bots. Yellow-rimmed × pits wreck you instantly. Orange-striped ! tiles collapse after beat 4. Lasers normally deal one hull; three damage wrecks you.",
+    "scene": [{ "icon": "🤖", "label": "You" }, { "icon": "🤖", "label": "Your friend", "fx": "shake" }, { "icon": "🕳️", "label": "An unfortunate shortcut" }],
+    "flow": true
+  },
+  {
+    "title": "Read the safety memo",
+    "text": "Crates arrive in round 2. Rocket boots burn hull, magnets have recoil, and unused armed shields overload. Read the warning before you toggle Use on your phone.",
+    "scene": [{ "card": "SHIELD", "color": "#bde278" }, { "card": "BOOST", "color": "#ffb547" }, { "card": "MAGNET", "color": "#77caff" }]
+  },
+  {
+    "title": "Win the shift",
+    "text": "Race: claim the flag once per round, first to three or most after ten rounds. Survival: three lives; the floor shrinks after rounds 2, 4 and 6. Last bot with lives wins.",
+    "scene": [{ "icon": "🏁", "label": "Race for flags" }, { "icon": "🔥", "label": "Or survive the factory" }, { "score": "REPLAY", "label": "Relive the worst decisions", "fx": "pop" }]
+  }
+]

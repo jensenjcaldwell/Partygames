@@ -1,0 +1,62 @@
+.game > .stage.pc-stage { display:block; position:relative; gap:0; }
+.pc-host { position:absolute; inset:0; overflow:hidden; isolation:isolate; color:#183840; background:#c5d5ca; text-align:left; font-family:Arial,Helvetica,sans-serif; }
+.pc-backdrop { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:-2; }
+.pc-shade { position:absolute; inset:0; background:linear-gradient(90deg,#eae4ce 0%,#eae4ceec 26%,#eae4ce00 62%); z-index:-1; }
+.pc-channel { position:absolute; top:1.1em; left:1.3em; display:flex; align-items:center; gap:.65em; font-size:.8em; font-weight:800; letter-spacing:.08em; }
+.pc-channel b { background:#153942; color:#fff4d8; padding:.45em .65em; border-radius:.1em; font-size:1.1em; }
+.pc-status { position:absolute; right:1.3em; top:1.2em; background:#aa342b; color:#fff; padding:.5em .8em; font-size:.8em; font-weight:800; letter-spacing:.12em; display:flex; align-items:center; gap:.5em; }
+.pc-status::before { content:''; width:.5em; height:.5em; border-radius:50%; background:#fff; }
+.pc-city-sign { position:absolute; top:27.8%; left:50%; transform:translateX(-50%); color:#384c4c; font-size:.8em; font-weight:900; letter-spacing:.3em; white-space:nowrap; }
+.pc-copy { position:absolute; top:14%; left:1.6em; width:25em; }
+.pc-eyebrow { font-size:.76em; font-weight:900; letter-spacing:.14em; margin:0 0 .6em; text-transform:uppercase; }
+.pc-title { font-size:3em; line-height:.94; letter-spacing:-.055em; margin:0 0 .25em; font-weight:900; text-transform:uppercase; }
+.pc-sub { font-size:1em; line-height:1.45; margin:0 0 .6em; max-width:23em; }
+.pc-rules { margin:1.2em 0; padding-left:1.2em; font-size:.86em; max-width:25em; }
+.pc-rules li { padding:.25em 0 .25em .3em; }
+.pc-setup .pc-copy { top:15%; }
+.pc-setup .pc-title { font-size:3em; }
+.pc-setup .pc-rules { margin:.8em 0; line-height:1.3; }
+.pc-button { border:0; border-radius:.15em; background:#163b44; color:#fff4db; padding:.7em 1em; font:inherit; font-size:.8em; font-weight:800; cursor:pointer; min-height:2.7em; }
+.pc-button:hover { background:#275561; }
+.pc-button:disabled { background:#687976; cursor:default; }
+.pc-button.secondary { background:#e8dfc9; color:#183840; border:2px solid #183840; }
+.pc-button:focus-visible { outline:3px solid #c24b31; outline-offset:3px; }
+.pc-controls { display:flex; flex-wrap:wrap; gap:.5em; max-width:29em; }
+.pc-figure { position:absolute; left:62%; bottom:20%; width:12em; height:15em; }
+.pc-head { position:absolute; top:0; left:3.7em; width:4.6em; height:5.5em; border-radius:48% 48% 40% 40%; background:#233c41; box-shadow:inset -.5em -.25em #112c33; }
+.pc-head span { display:block; color:#f4be57; font-size:3.1em; text-align:center; line-height:1.75; font-weight:800; }
+.pc-body { position:absolute; left:0; right:0; top:5em; height:10em; background:#294a52; border-radius:5em 5em 0 0; }
+.pc-tie { position:absolute; top:5.2em; left:5.5em; width:1em; height:4em; background:#bd5940; clip-path:polygon(0 0,100% 0,70% 20%,100% 85%,50% 100%,0 85%,30% 20%); }
+.pc-podium { position:absolute; left:57%; bottom:14%; width:22em; height:9.2em; background:#755443; border-top:.45em solid #a17b58; clip-path:polygon(0 0,100% 0,93% 100%,7% 100%); box-shadow:inset 0 0 0 1em #634838; }
+.pc-seal { position:absolute; top:1.1em; left:50%; transform:translateX(-50%); width:5.8em; height:5.8em; border:.15em solid #dbb878; border-radius:50%; background:#203d44; color:#f0d295; display:flex; align-items:center; justify-content:center; font-size:1em; }
+.pc-seal span { font-size:2.9em; }
+.pc-mics { position:absolute; left:63%; bottom:42%; width:13em; height:4em; }
+.pc-mic { position:absolute; height:3.7em; width:.18em; background:#283b3e; transform-origin:bottom; transform:rotate(-25deg); left:2em; bottom:0; }
+.pc-mic::before { content:''; position:absolute; top:-.8em; left:-.35em; width:.9em; height:1.4em; background:#1c3037; border-radius:.4em; }
+.pc-mic:nth-child(2) { transform:rotate(7deg); left:6em; }
+.pc-mic:nth-child(3) { transform:rotate(32deg); left:10em; }
+.pc-mic:nth-child(2)::before { background:#aa342b; }
+.pc-mic:nth-child(3)::before { background:#325c68; }
+.pc-lower { position:absolute; left:0; right:0; bottom:0; background:#173942; color:#fff1d5; }
+.pc-lower-main { display:flex; align-items:center; gap:1em; padding:.65em 1.3em; min-height:3.1em; }
+.pc-label { background:#efbc59; color:#173942; padding:.5em .7em; font-size:.76em; font-weight:900; letter-spacing:.06em; white-space:nowrap; }
+.pc-lower-name { font-size:1.1em; font-weight:900; overflow-wrap:anywhere; }
+.pc-lower-sub { font-size:.74em; margin-top:.2em; color:#fff1d5; }
+.pc-counter { margin-left:auto; text-align:right; font-size:.8em; white-space:nowrap; }
+.pc-ticker { background:#f1e8ce; color:#183840; padding:.5em 1.7em; font-size:.72em; font-weight:700; }
+.pc-queue { display:flex; flex-wrap:wrap; gap:.4em; margin:.5em 0; max-width:24em; }
+.pc-queue span { background:#fff4dc; border:1px solid #a6aa95; font-size:.74em; padding:.35em .6em; font-weight:700; }
+.pc-queue .current { background:#173942; color:#fff4dc; border-color:#173942; }
+.pc-queue .away { text-decoration:line-through; }
+.pc-on-air { font-size:1.45em; font-weight:900; line-height:1.1; margin:.35em 0; overflow-wrap:anywhere; }
+.pc-reveal .pc-shade,.pc-finished .pc-shade { background:#eae4cef2; }
+.pc-reveal .pc-copy,.pc-finished .pc-copy { width:calc(100% - 3.2em); top:16%; }
+.pc-finished .pc-copy { top:14%; }
+.pc-finished .pc-title { font-size:2.6em; }
+.pc-reveal .pc-city-sign,.pc-finished .pc-city-sign { display:none; }
+.pc-premise { font-size:2.05em; line-height:1.18; letter-spacing:-.025em; font-weight:900; max-width:24em; margin:.6em 0; }
+.pc-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:.3em 1.2em; margin:.65em 0; max-width:49em; }
+.pc-result-row { display:grid; grid-template-columns:1fr auto; gap:.5em; padding:.3em .7em; background:#fff4dc; font-size:.76em; align-items:center; }
+.pc-result-row b { overflow-wrap:anywhere; }
+.pc-result-row span { white-space:nowrap; }
+@media (prefers-reduced-motion:no-preference) { .pc-copy { animation:pc-enter .3s ease-out; } @keyframes pc-enter { from { transform:translateY(.4em); opacity:0; } } }

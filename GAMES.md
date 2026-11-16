@@ -70,7 +70,7 @@ export default async function (ctx) {
 | `ctx.shuffle(arr)`, `ctx.pick(arr)`, `ctx.esc(str)` | Helpers. |
 | `ctx.asset(path)` | URL of a file in your game folder. |
 | `ctx.sfx(name)` | Sound effect, synthesized (no files): `tick`, `tock`, `pop`, `join`, `ding`, `whoosh`, `start`, `win`, `lose`, `buzz`, `glitch`, `timeup`. |
-| `ctx.music(mood)` | Background music: `'lobby'`, `'party'`, `'think'`, `'tense'`, or `null`. Set `"music"` in game.json for the default. |
+| `ctx.music(mood)` | Background music: `'lobby'`, `'party'`, `'think'`, `'tense'`, `'factory'` (industrial funk), or `null`. Set `"music"` in game.json for the default. |
 
 Built in, no code needed: countdowns tick-tock for the last 10 seconds and
 buzz at zero, answers make a pop, `ctx.say` whooshes, there's a mute button on

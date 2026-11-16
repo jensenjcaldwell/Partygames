@@ -1,0 +1,9 @@
+{
+  "name": "Press Conference",
+  "description": "Take the podium outside city hall. Everyone knows your ridiculous story except you. Field questions and figure it out!",
+  "icon": "🎙️",
+  "color": "#f4be57",
+  "minPlayers": 4,
+  "maxPlayers": 12,
+  "lateJoin": false
+}

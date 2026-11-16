@@ -1,0 +1,23 @@
+body.phone:has(.pc-phone) .top .me { white-space:normal; overflow:visible; overflow-wrap:anywhere; font-size:18px; }
+.pc-phone { background:#f0e7d1; color:#193b44; padding:22px; border-radius:4px; font-family:Arial,Helvetica,sans-serif; text-align:left; overflow-wrap:anywhere; }
+.pc-pass-top { display:flex; align-items:center; gap:12px; border-bottom:2px solid #193b44; padding-bottom:16px; }
+.pc-pass-top b { background:#193b44; color:#f0e7d1; font-size:22px; padding:8px; }
+.pc-pass-top span { font-size:14px; font-weight:800; letter-spacing:1px; }
+.pc-phone-kicker { text-transform:uppercase; font-size:14px; font-weight:800; letter-spacing:1.4px; margin:24px 0 10px; }
+.pc-phone h1 { font-size:36px; line-height:1.02; margin:0 0 18px; letter-spacing:-1.5px; }
+.pc-phone-round { font-size:14px; font-weight:800; padding:10px 0; border-top:1px solid #9b9d88; }
+.pc-secret { background:#193b44; color:#fff2d5; padding:18px; margin:12px 0 18px; border-left:5px solid #e9b858; }
+.pc-secret b { font-size:14px; letter-spacing:1px; }
+.pc-secret p { font-size:23px; line-height:1.35; margin:14px 0 0; font-weight:700; }
+.pc-phone-instruction { font-size:18px; line-height:1.55; margin:18px 0; }
+.pc-mystery { padding:16px; border:2px dashed #66796e; display:flex; align-items:center; gap:18px; }
+.pc-mystery span { font-size:64px; line-height:1; font-weight:900; }
+.pc-mystery p { margin:0; font-size:16px; line-height:1.5; }
+.pc-your-turn { background:#f3c363; color:#193b44; font-size:15px; font-weight:900; padding:14px; margin:14px 0; }
+.pc-phone-actions { display:flex; flex-direction:column; gap:12px; }
+.pc-phone-button { width:100%; border:2px solid #193b44; background:#193b44; color:#fff2d5; font:inherit; font-size:18px; font-weight:800; padding:17px 14px; min-height:54px; border-radius:3px; cursor:pointer; }
+.pc-phone-button.secondary { color:#193b44; background:transparent; }
+.pc-phone-button:disabled { background:#597169; border-color:#597169; color:#fff; cursor:wait; }
+.pc-phone-button:focus-visible { outline:3px solid #a43d26; outline-offset:3px; }
+.pc-pass-footer { margin:24px 0 0; padding-top:14px; border-top:1px solid #9b9d88; font-size:14px; font-weight:800; line-height:1.5; }
+@media (max-width:350px) { .pc-phone { padding:16px; } .pc-phone h1 { font-size:32px; } .pc-secret p { font-size:21px; } }

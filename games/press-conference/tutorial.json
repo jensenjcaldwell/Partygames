@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Take the podium",
+    "text": "One presenter faces the press outside city hall. Everyone else sees a silly secret on their phone. The presenter doesn’t!",
+    "scene": [{"icon":"🏛️","label":"City hall"},{"phone":"Identity: classified","label":"Presenter"},{"phone":"You’re a raccoon elected mayor after promising unlimited bins.","label":"Reporters"}]
+  },
+  {
+    "title": "Questions from the press",
+    "text": "Reporters take turns asking questions aloud. The presenter improvises an answer. Then the reporter taps to pass the microphone.",
+    "scene": [{"icon":"🎙️","label":"Ask aloud"},{"tv":"No further comment!","sub":"Answer confidently"},{"phone":"Answer finished","buttons":["Next reporter"],"tap":0}],
+    "flow": true
+  },
+  {
+    "title": "Piece together the story",
+    "text": "Guess who you are AND what you did, out loud. The current reporter confirms. Wrong? Keep going! Right? Reveal the secret and rotate presenters.",
+    "scene": [{"phone":"I have a guess","buttons":["I have a guess"],"tap":0},{"phone":"Did they get it?","buttons":["They got it!","Not quite"],"tap":0},{"icon":"🔄","label":"Rotate the spotlight"}],
+    "flow": true
+  }
+]
