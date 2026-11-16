@@ -34,9 +34,9 @@ function injectStyles() {
       color: #ffcf87;
       font-family: 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
       display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      gap: 0.7em;
-      padding: 1.1em 1.4em;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      gap: 0.42em;
+      padding: 0.55em 1.0em;
       box-sizing: border-box;
       position: relative;
       overflow: hidden;
@@ -51,19 +51,19 @@ function injectStyles() {
       gap: 0.6em;
     }
     .lcars-elbow-tl {
-      height: 2.3em;
+      height: 1.85em;
       background: #ff9900;
-      border-radius: 1.4em 0 0 0;
+      border-radius: 1.2em 0 0 0;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #000;
       font-weight: 900;
-      font-size: 0.95em;
+      font-size: 0.9em;
       letter-spacing: 0.08em;
     }
     .lcars-bar {
-      height: 2.3em;
+      height: 1.85em;
       background: linear-gradient(90deg, #ffaa66 0%, #ffaa66 58%, #cc99cc 58%, #cc99cc 100%);
       display: flex;
       align-items: center;
@@ -73,7 +73,7 @@ function injectStyles() {
       font-weight: 800;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      font-size: 0.95em;
+      font-size: 0.9em;
       position: relative;
       overflow: hidden;
     }
@@ -91,9 +91,9 @@ function injectStyles() {
       100% { left: 105%; }
     }
     .lcars-pill-status {
-      height: 2.3em;
-      padding: 0 1.1em;
-      border-radius: 0 1.4em 1.4em 0;
+      height: 1.85em;
+      padding: 0 1.0em;
+      border-radius: 0 1.2em 1.2em 0;
       background: #99ccff;
       color: #000;
       font-weight: 900;
@@ -101,7 +101,7 @@ function injectStyles() {
       align-items: center;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      font-size: 0.9em;
+      font-size: 0.85em;
       transition: background 0.3s, color 0.3s;
     }
     .lcars-pill-status.borg {
@@ -122,13 +122,13 @@ function injectStyles() {
     .team-panel {
       background: #0a0c14;
       border: 2px solid #ff9900;
-      border-left: 1.1em solid #ff9900;
-      border-radius: 0.9em;
-      padding: 0.65em 1em;
+      border-left: 1.0em solid #ff9900;
+      border-radius: 0.8em;
+      padding: 0.42em 0.85em;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.8em;
+      gap: 0.7em;
       transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
     }
     .team-panel.beta {
@@ -227,25 +227,27 @@ function injectStyles() {
     .lcars-stage {
       background: #070910;
       border: 2px solid #334155;
-      border-radius: 1.2em;
-      padding: 1.2em 1.6em;
+      border-radius: 1.0em;
+      padding: 0.65em 1.2em;
+      min-height: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1em;
+      gap: 0.55em;
       position: relative;
       overflow: hidden;
     }
     .stage-kicker {
-      font-size: 0.95em;
+      font-size: 0.88em;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: #99ccff;
       font-weight: 700;
     }
     .stage-title {
-      font-size: 2.1em;
+      font-size: 1.6em;
+      line-height: 1.1;
       font-weight: 900;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -253,26 +255,26 @@ function injectStyles() {
       text-align: center;
     }
     .stage-sub {
-      font-size: 1.15em;
+      font-size: 1.0em;
       color: #ffcf87;
       text-align: center;
       max-width: 44em;
-      line-height: 1.35;
+      line-height: 1.25;
     }
 
     .clue-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(11em, 1fr));
-      gap: 1.1em;
+      grid-template-columns: repeat(3, minmax(10em, 1fr));
+      gap: 0.9em;
       width: 100%;
       max-width: 44em;
     }
     .clue-card {
       background: #0d1220;
       border: 2px solid #ff9900;
-      border-top: 0.6em solid #ff9900;
-      border-radius: 0.8em;
-      padding: 1.2em 0.8em;
+      border-top: 0.5em solid #ff9900;
+      border-radius: 0.7em;
+      padding: 0.75em 0.7em;
       text-align: center;
       position: relative;
       animation: cardSlideIn 0.4s ease-out both;
@@ -426,34 +428,34 @@ function injectStyles() {
       align-items: center;
     }
     .lcars-bottom-pill {
-      height: 1.8em;
-      padding: 0 1em;
-      border-radius: 1em 0 0 1em;
+      height: 1.5em;
+      padding: 0 0.9em;
+      border-radius: 0.9em 0 0 0.9em;
       background: #cc99cc;
       color: #000;
       font-weight: 900;
-      font-size: 0.85em;
+      font-size: 0.8em;
       display: flex;
       align-items: center;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     .lcars-bottom-bar {
-      height: 1.8em;
+      height: 1.5em;
       background: #ff9900;
       display: flex;
       align-items: center;
-      padding: 0 1em;
+      padding: 0 0.9em;
       color: #000;
       font-weight: 800;
-      font-size: 0.85em;
+      font-size: 0.8em;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
     .lcars-elbow-br {
-      height: 1.8em;
+      height: 1.5em;
       background: #99ccff;
-      border-radius: 0 0 1.2em 0;
+      border-radius: 0 0 1.0em 0;
     }
   `;
   document.head.appendChild(s);
@@ -590,7 +592,9 @@ export default async function (ctx) {
           )
         )
       ),
-      h('div.lcars-stage', {}, ...stageChildren),
+      h('div.lcars-stage', {},
+        h('div.lcars-stage-inner', { style: 'width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.55em;' }, ...stageChildren)
+      ),
       h('div.lcars-bottom', {},
         h('div.lcars-bottom-pill', {}, 'OVERRIDE'),
         h('div.lcars-bottom-bar', {},
@@ -601,6 +605,13 @@ export default async function (ctx) {
       )
     );
     ctx.el.appendChild(root);
+    requestAnimationFrame(() => {
+      const st = root.querySelector('.lcars-stage');
+      const inner = root.querySelector('.lcars-stage-inner');
+      if (st && inner && inner.scrollHeight > st.clientHeight - 8) {
+        inner.style.zoom = String(Math.max(0.55, (st.clientHeight - 8) / inner.scrollHeight));
+      }
+    });
   }
 
   // Intro
