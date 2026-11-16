@@ -8,17 +8,17 @@ export const OVERRIDE_CODES = [
 ];
 
 const RAW_CATEGORIES = {
-  'Animals & Nature': [
+  'Animal': [
     'Penguin', 'Octopus', 'Chameleon', 'Hummingbird', 'Kangaroo', 'Porcupine', 'Flamingo', 'Platypus',
     'Grizzly Bear', 'Snow Leopard', 'Bald Eagle', 'Great White', 'Sea Turtle', 'Jellyfish', 'Lobster',
     'Bumblebee', 'Dragonfly', 'Scorpion', 'Tarantula', 'Cobra', 'Crocodile', 'Alligator', 'Hippo',
     'Rhinoceros', 'Giraffe', 'Elephant', 'Cheetah', 'Gorilla', 'Orangutan', 'Koala', 'Sloth',
     'Armadillo', 'Hedgehog', 'Raccoon', 'Beaver', 'Otter', 'Walrus', 'Narwhal', 'Dolphin',
     'Blue Whale', 'Seahorse', 'Starfish', 'Pufferfish', 'Peacock', 'Ostrich', 'Pelican', 'Toucan',
-    'Parrot', 'Barn Owl', 'Woodpecker', 'Cactus', 'Venus Flytrap', 'Redwood', 'Bamboo', 'Sunflower',
-    'Pinecone', 'Mushroom', 'Coral Reef', 'Tumbleweed', 'Dandelion',
+    'Parrot', 'Barn Owl', 'Woodpecker', 'Meerkat', 'Capybara', 'Gecko', 'Albatross', 'Pelican',
+    'Antelope', 'Bison', 'Wolverine', 'Manatee', 'Stingray',
   ],
-  'Food & Drink': [
+  'Food': [
     'Pancakes', 'Waffles', 'Cinnamon Roll', 'Croissant', 'Bagel', 'Pretzel', 'Sourdough', 'Garlic Bread',
     'Pepperoni Pizza', 'Grilled Cheese', 'Cheeseburger', 'Hot Dog', 'French Fries', 'Onion Rings', 'Nachos',
     'Guacamole', 'Burrito', 'Quesadilla', 'Tacos', 'Sushi Roll', 'Ramen', 'Dumplings', 'Spring Roll',
@@ -29,7 +29,7 @@ const RAW_CATEGORIES = {
     'Milkshake', 'Smoothie', 'Lemonade', 'Iced Tea', 'Espresso', 'Hot Cocoa', 'Orange Juice', 'Root Beer',
     'Gingerbread',
   ],
-  'Everyday Objects': [
+  'Object': [
     'Umbrella', 'Sunglasses', 'Wristwatch', 'Backpack', 'Suitcase', 'Wallet', 'Keychain', 'Flashlight',
     'Binoculars', 'Magnifying Glass', 'Compass', 'Pocket Knife', 'Scissors', 'Stapler', 'Paperclip',
     'Rubber Band', 'Sticky Notes', 'Fountain Pen', 'Highlighter', 'Paintbrush', 'Toothbrush', 'Hairdryer',
@@ -39,7 +39,7 @@ const RAW_CATEGORIES = {
     'Bookshelf', 'Rocking Chair', 'Hammock', 'beanbag', 'Pillow', 'Blanket', 'Doorbell', 'Padlock',
     'Safe', 'Mirror', 'Picture Frame', 'Vase', 'Watering Can', 'Wheelbarrow', 'Ladder', 'Toolbox',
   ],
-  'Places & Landmarks': [
+  'Location': [
     'Lighthouse', 'Windmill', 'Treehouse', 'Log Cabin', 'Igloo', 'Castle', 'Palace', 'Cathedral',
     'Pyramid', 'Colosseum', 'Suspension Bridge', 'Skyscraper', 'Clock Tower', 'Water Tower', 'Barn',
     'Greenhouse', 'Library', 'Museum', 'Art Gallery', 'Planetarium', 'Aquarium', 'Botanical Garden',
@@ -50,7 +50,7 @@ const RAW_CATEGORIES = {
     'Rainforest', 'Swamp', 'Meadow', 'Orchard', 'Vineyard', 'Bakery', 'Coffee Shop', 'Barbershop',
     'Fire Station', 'Post Office', 'Hospital',
   ],
-  'Jobs & Roles': [
+  'Profession': [
     'Firefighter', 'Paramedic', 'Surgeon', 'Dentist', 'Pharmacist', 'Veterinarian', 'Pilot', 'Flight Attendant',
     'Ship Captain', 'Lifeguard', 'Park Ranger', 'Lumberjack', 'Farmer', 'Beekeeper', 'Florist',
     'Pastry Chef', 'Butcher', 'Barista', 'Waiter', 'Architect', 'Carpenter', 'Electrician', 'Plumber',
@@ -61,7 +61,7 @@ const RAW_CATEGORIES = {
     'Film Director', 'Stunt Double', 'Voice Actor', 'Cartoonist', 'Sculptor', 'Auctioneer', 'Referee',
     'Chess Grandmaster',
   ],
-  'Sports & Games': [
+  'Activity': [
     'Basketball', 'Soccer Ball', 'Baseball Bat', 'Football Helmet', 'Tennis Racket', 'Golf Club',
     'Bowling Pin', 'Billiard Ball', 'Ping Pong', 'Badminton', 'Volleyball', 'Hockey Stick', 'Ice Skates',
     'Rollerblades', 'Skateboard', 'Surfboard', 'Snowboard', 'Water Skis', 'Kayak', 'Canoe',
@@ -72,7 +72,7 @@ const RAW_CATEGORIES = {
     'Playing Cards', 'Poker Chips', 'Pair of Dice', 'Dartboard', 'Pinball Machine', 'Arcade Cabinet',
     'Joystick', 'Treasure Hunt', 'Obstacle Course', 'Relay Race', 'Penalty Kick', 'Home Run',
   ],
-  'Vehicles & Travel': [
+  'Vehicle': [
     'Sailboat', 'Speedboat', 'Submarine', 'Cruise Ship', 'Tugboat', 'Ferry', 'Gondola', 'Houseboat',
     'Hovercraft', 'Seaplane', 'Biplane', 'Helicopter', 'Blimp', 'Hot Air Balloon', 'Hang Glider',
     'Parachute', 'Jetliner', 'Cargo Plane', 'Steam Train', 'Bullet Train', 'Cable Car', 'Monorail',
@@ -83,7 +83,7 @@ const RAW_CATEGORIES = {
     'Toboggan', 'Bobsled', 'Snowmobile', 'Camper Van', 'Caravan', 'Luggage Cart', 'Escalator',
     'Elevator', 'Drawbridge',
   ],
-  'Science, Tech & Space': [
+  'Invention': [
     'Telescope', 'Microscope', 'Periscope', 'Kaleidoscope', 'Prism', 'Pendulum', 'Magnet', 'Horseshoe Magnet',
     'Electromagnet', 'Battery', 'Lightbulb', 'Solar Panel', 'Wind Turbine', 'Steam Engine', 'Gears',
     'Pulley', 'Catapult', 'Trebuchet', 'Thermometer', 'Barometer', 'Sundial', 'Sextant', 'Abacus',
