@@ -116,7 +116,7 @@ function connect() {
           const d = m.data;
           if (d && d.kind === 'view') {
             lastView = d.view;
-            if (listeners.view.length) listeners.view.forEach((f) => f(d.view));
+            if (!d.view?.lobby && listeners.view.length) listeners.view.forEach((f) => f(d.view));
             else renderView(stage, d.view, (x) => sock.send({ t: 'send', data: x }));
             if (d.view?.color) document.body.style.setProperty('--accent', d.view.color);
             else document.body.style.removeProperty('--accent');

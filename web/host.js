@@ -125,7 +125,14 @@ function onMsg(m) {
       break;
     }
     case 'removed': players.delete(m.id); run ? run.emit('leave', null) : lobby(); break;
-    case 'msg': run?.message(players.get(m.from), m.data); break;
+    case 'msg':
+      if (run) run.message(players.get(m.from), m.data);
+      else if (m.data?.kind === 'answer' && m.data.ask === '__lobby' && m.data.value === '__lobby_start') {
+        const first = [...players.values()].find((p) => p.connected);
+        const count = [...players.values()].filter((p) => p.connected).length;
+        if (first?.id === m.from && count >= (game?.minPlayers || 1)) start();
+      }
+      break;
     case 'error':
       sock?.close(); sock = null; room = null; run = null;
       try { sessionStorage.removeItem(SAVE); } catch {}
@@ -184,6 +191,26 @@ function lobby() {
       h('button.ghost', { onclick: quit }, 'Pick another game'),
       muteButton())));
   list.forEach((p) => shown.add(p.id));
+  const first = list.find((p) => p.connected);
+  const others = list.filter((p) => p.connected && p.id !== first?.id).map((p) => p.id);
+  const title = `${game?.icon || ''} ${game?.name || 'Lobby'}`.trim();
+  if (first) {
+    sock.send({
+      t: 'send', to: [first.id],
+      data: {
+        kind: 'view',
+        view: enough
+          ? { lobby: true, ask: '__lobby', title, text: `${list.filter((p) => p.connected).length} players ready. You’re first in — tap below to start!`, color: game?.color, choices: [{ label: "Everybody's in! (Start Game)", value: '__lobby_start' }] }
+          : { lobby: true, title, color: game?.color, wait: `Waiting for ${min - list.filter((p) => p.connected).length} more player(s)…` },
+      },
+    });
+  }
+  if (others.length) {
+    sock.send({
+      t: 'send', to: others,
+      data: { kind: 'view', view: { lobby: true, title, color: game?.color, wait: `Waiting for ${first?.name || 'the host'} to start…` } },
+    });
+  }
 }
 const shown = new Set();
 

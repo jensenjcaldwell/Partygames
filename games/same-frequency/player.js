@@ -21,7 +21,11 @@ export default function (ctx) {
     } else if (v.phase === 'finished') {
       const me = v.players.find((p) => p.id === ctx.me.id);
       body = [h('h1', 'That was a good connection.'), h('div.sf-phone-score', `${me?.score ?? 0}`, h('span', 'YOUR POINTS')),
-        h('p', 'Check the TV for the final standings. Same friends, new frequencies next time.')];
+        h('p', 'Check the TV for the final standings.'),
+        v.captain ? h('div.sf-phone-actions',
+          actionButton('Play again (same players) →', 'replay'),
+          h('button.sf-button.secondary', { onclick: () => send(latest, 'lobby') }, 'New players (back to lobby)'))
+          : h('p.sf-phone-note', 'Waiting for the host to start another game.')];
     } else if (v.phase === 'reveal') {
       const result = v.result.points.find((p) => p.id === ctx.me.id);
       body = [h('h1', v.skipped ? 'Signal skipped.' : 'Signal found.'),
@@ -42,13 +46,17 @@ export default function (ctx) {
     } else if (v.phase === 'clue') {
       body = [h('h1', 'A signal is forming.'), waves(h),
         h('div.sf-phone-spectrum', h('b', v.spectrum[0]), h('span', '↔'), h('b', v.spectrum[1])),
-        h('p', `${v.giver.name} is thinking of a clue. Only their phone can see the target.`)];
+        h('p', `${v.giver.name} is thinking of a clue. Only their phone can see the target.`),
+        v.captain && h('button.sf-button.secondary', { onclick: () => send(latest, 'skip') }, 'Skip round')];
     } else if (v.giving) {
+      const submittedCount = v.players.filter((p) => p.submitted && p.id !== v.giver.id).length;
       body = [h('h1', v.phase === 'debate' ? 'How well do they know you?' : 'Let them tune in.'),
         h('blockquote', v.clue), h('div.sf-phone-dial', dial({ target: v.target, markers: v.players.filter((p) => p.guess !== undefined) })),
         h('p', `Your secret target is ${v.target}. Keep a poker face while everyone guesses.`),
         v.phase === 'debate' ? actionButton('Reveal the signal →', 'reveal') :
-          h('p.sf-phone-note', `${v.players.filter((p) => p.submitted && p.id !== v.giver.id).length} guesses received. Waiting for the room…`)];
+          [h('p.sf-phone-note', `${submittedCount} guesses received. Waiting for the room…`),
+           submittedCount > 0 && actionButton('Discuss guesses →', 'discuss')],
+        v.captain && h('button.sf-button.secondary', { onclick: () => send(latest, 'skip') }, 'Skip round')];
     } else {
       const board = h('div.sf-phone-dial', dial({ value: draft }));
       const readout = h('output.sf-readout', { id: 'sf-position' }, String(draft));
@@ -65,7 +73,9 @@ export default function (ctx) {
         h('button.sf-button', { onclick: () => {
           send(latest, 'guess', draft); status.textContent = 'Sending your frequency…';
         } }, v.mine !== undefined ? 'Update my guess →' : 'Save my guess →'), status,
-        v.phase === 'debate' && h('p', 'All guesses are on the TV. Talk it over and update yours if someone changes your mind. Your DJ will reveal when you’re ready.')];
+        v.phase === 'debate' && h('p', 'All guesses are on the TV. Talk it over and update yours if someone changes your mind.'),
+        v.captain && (v.phase === 'guess' && v.players.some((p) => p.submitted && p.id !== v.giver.id) ? actionButton('Discuss guesses →', 'discuss') : v.phase === 'debate' ? actionButton('Reveal the signal →', 'reveal') : null),
+        v.captain && h('button.sf-button.secondary', { onclick: () => send(latest, 'skip') }, 'Skip round')];
     }
     ctx.el.replaceChildren(h('section.sf-phone', h('header', h('b', 'sf /'), h('span', 'SAME FREQUENCY')),
       h('p.sf-phone-kicker', ['setup', 'finished'].includes(v.phase) ? 'TUNE INTO EACH OTHER' : `TRACK ${v.round + 1} / ${v.total} · ${v.giving ? 'YOUR DJ SET' : `DJ: ${v.giver.name}`}`),

@@ -32,6 +32,10 @@ export default async function (ctx) {
     for (const { ids, view } of groups.values()) ctx.show(ids, view);
   }
   function perform(id, action, value, host = false, envelope = s) {
+    if (action === 'lobby' && s.phase === 'finished' && (host || captain(s) === id)) {
+      done = true;
+      return;
+    }
     const before = s.phase;
     if (!act(s, id, { match: envelope.match, round: envelope.round, phase: envelope.phase, action, value }, host)) return;
     if (s.phase !== before) audio.effect(s.phase === 'reveal' ? 'reveal' : s.phase === 'finished' ? 'win' : 'tune');
@@ -71,7 +75,10 @@ export default async function (ctx) {
         copy(`${winners.join(' & ')} ${winners.length > 1 ? 'share the top spot' : 'wins'} with ${ranked[0].score} points.`),
         h('div.sf-final-grid', ranked.map((p, i) => h('div.sf-final-row',
           h('span', String(i + 1).padStart(2, '0')), h('b', p.name), h('strong', `${p.score} pts`)))),
-        h('button.sf-button', { onclick: () => { done = true; } }, 'Back to the lobby'), waves(h));
+        h('div.sf-controls',
+          button('Play again (same players) →', 'replay'),
+          h('button.sf-button.secondary', { onclick: () => { done = true; } }, 'New players (back to lobby)')),
+        waves(h));
     } else {
       const markers = v.players.filter((p) => p.guess !== undefined);
       const submitted = v.players.filter((p) => p.id !== v.giver.id && p.submitted).length;

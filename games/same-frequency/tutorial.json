@@ -1,104 +1,74 @@
 [
   {
-    "title": "One DJ. One secret signal.",
-    "text": "The DJ sees a hidden target on a spectrum. Only their phone knows where it is.",
+    "title": "A spectrum from 0 to 100",
+    "text": "Every round shows a scale with two opposites, like Cold at 0 and Hot at 100. For example, an ice cube is around 10, lukewarm soup is 50, and a bonfire is 90.",
     "scene": [
       {
-        "phone": "Minor inconvenience \u2194 Total catastrophe",
-        "label": "Everyone\u2019s spectrum"
-      },
-      {
-        "phone": "PRIVATE TARGET: 72 / 100",
-        "label": "DJ only",
+        "tv": "Cold (0)  \u2194  Hot (100)",
+        "sub": "Ice cube \u2248 10 \u00b7 Lukewarm \u2248 50 \u00b7 Bonfire \u2248 90",
         "fx": "glow"
       }
     ],
     "audio": "audio/tut_1.wav",
-    "ms": 9140
+    "ms": 14700
   },
   {
-    "title": "Give an example, not a number.",
-    "text": "The DJ writes a clue that belongs at that spot: Your wedding cake arrives frozen.",
+    "title": "One DJ gets the secret number",
+    "text": "Only the DJ's phone sees where the hidden target sits on the scale, such as 72 out of 100. Everyone else only sees the two ends.",
     "scene": [
       {
-        "phone": "Write a clue",
-        "type": "Your wedding cake arrives frozen.",
-        "label": "The DJ"
+        "phone": "Cold \u2194 Hot",
+        "label": "Everyone else"
       },
       {
-        "tv": "Your wedding cake arrives frozen.",
-        "sub": "Minor inconvenience \u2194 Total catastrophe"
+        "phone": "SECRET TARGET: 72 / 100",
+        "label": "DJ only",
+        "fx": "glow"
       }
     ],
     "audio": "audio/tut_2.wav",
-    "ms": 9100
+    "ms": 10620
   },
   {
-    "title": "Tune in. Then talk it over.",
-    "text": "Everyone saves a guess on their phone. Once guesses are in, the TV shows the needles. Debate and update your guesses.",
+    "title": "Give a real-world clue",
+    "text": "The DJ writes a clue that sits at that exact spot\u2014without saying any numbers. For 72 on Cold to Hot, a great clue is a fresh cup of coffee.",
     "scene": [
       {
-        "phone": "Your frequency: 65",
-        "label": "Ana"
+        "phone": "Write a clue for 72",
+        "type": "A fresh cup of coffee",
+        "label": "The DJ"
       },
       {
-        "phone": "Your frequency: 78",
-        "label": "Cy"
-      },
-      {
-        "tv": "Talk it over.",
-        "sub": "All guesses visible. Target still hidden.",
-        "fx": "pulse"
+        "tv": "\"A fresh cup of coffee\"",
+        "sub": "Cold \u2194 Hot"
       }
     ],
     "audio": "audio/tut_3.wav",
-    "ms": 9380
+    "ms": 11580
   },
   {
-    "title": "Reveal the signal.",
-    "text": "Within 5 earns 4 points; within 10, 3; within 15, 2; within 25, 1. The DJ earns the rounded average of submitted guesses\u2019 points.",
+    "title": "Guess, talk it over, and reveal",
+    "text": "Everyone locks in a number on their phone. Then all needles appear on the TV so you can debate and adjust before revealing the target. Closer guesses win up to 4 points, and the DJ scores the group's average!",
     "scene": [
+      {
+        "phone": "Dial: 68",
+        "label": "Ana"
+      },
+      {
+        "phone": "Dial: 75",
+        "label": "Cy"
+      },
       {
         "card": "TARGET: 72",
         "color": "#7c9b92",
         "fx": "pop"
       },
       {
-        "score": "+3",
-        "label": "Guess: 65"
-      },
-      {
-        "score": "+3",
-        "label": "Guess: 78"
-      },
-      {
-        "score": "+3",
-        "label": "DJ bonus"
+        "score": "+4",
+        "label": "Bullseye!"
       }
     ],
     "audio": "audio/tut_4.wav",
-    "ms": 13940
-  },
-  {
-    "title": "Pass the headphones.",
-    "text": "Everyone gets one turn as DJ. No timer: let the conversation breathe. Most points after the final broadcast wins.",
-    "scene": [
-      {
-        "icon": "\ud83d\udcfb",
-        "label": "New DJ",
-        "fx": "float"
-      },
-      {
-        "icon": "\ud83c\udfaf",
-        "label": "New target"
-      },
-      {
-        "icon": "\ud83c\udfc6",
-        "label": "Same frequency",
-        "fx": "glow"
-      }
-    ],
-    "audio": "audio/tut_5.wav",
-    "ms": 9140
+    "ms": 16780
   }
 ]

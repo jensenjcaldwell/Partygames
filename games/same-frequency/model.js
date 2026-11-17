@@ -63,13 +63,13 @@ export function act(s, id, message, host = false) {
       if (s.phase === 'guess') readyToDebate(s);
       break;
     case 'discuss':
-      if (s.phase !== 'guess' || !(host || giving) || !Object.keys(s.guesses).length) return false;
+      if (s.phase !== 'guess' || !(lead || giving) || !Object.keys(s.guesses).length) return false;
       s.phase = 'debate'; break;
     case 'reveal':
-      if (s.phase !== 'debate' || !(host || giving)) return false;
+      if (s.phase !== 'debate' || !(lead || giving)) return false;
       reveal(s); break;
     case 'skip':
-      if (!host || !['clue', 'guess', 'debate'].includes(s.phase)) return false;
+      if (!lead || !['clue', 'guess', 'debate'].includes(s.phase)) return false;
       reveal(s, true); break;
     case 'next':
       if (s.phase !== 'reveal' || !lead) return false;
@@ -78,6 +78,13 @@ export function act(s, id, message, host = false) {
       while (s.round < s.total && !giver(s).connected) s.round++;
       if (s.round >= s.total) s.phase = 'finished';
       else begin(s);
+      break;
+    case 'replay':
+      if (s.phase !== 'finished' || !lead) return false;
+      s.round = 0;
+      s.results = [];
+      for (const seat of s.seats) seat.score = 0;
+      begin(s);
       break;
     default: return false;
   }
