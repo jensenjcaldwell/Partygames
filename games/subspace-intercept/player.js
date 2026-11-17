@@ -51,11 +51,14 @@ export default function (ctx) {
   ctx.on('message', (m) => {
     if (!m || m.mode !== 'threeClues') return;
     const h = ctx.h;
+    const reqLetter = (m.reqLetter || '').toUpperCase();
     const inputs = [1, 2, 3].map((n) =>
       h('input', {
         type: 'text',
         maxlength: 24,
-        placeholder: `Clue ${n} (one word)`,
+        placeholder: n === 1 && reqLetter
+          ? `Clue 1 (MUST start with "${reqLetter}")`
+          : `Clue ${n} (one word)`,
         autocomplete: 'off',
       })
     );
@@ -66,6 +69,10 @@ export default function (ctx) {
         const vals = inputs.map((el) => el.value.trim().split(/\s+/)[0] || '');
         if (vals.some((v) => !v)) {
           err.textContent = 'Enter all 3 one-word clues.';
+          return;
+        }
+        if (reqLetter && !vals[0].toUpperCase().startsWith(reqLetter)) {
+          err.textContent = `Clue 1 must start with "${reqLetter}".`;
           return;
         }
         ctx.send({ clues: vals });
@@ -81,7 +88,8 @@ export default function (ctx) {
     ctx.el.replaceChildren(
       h('div.card', { style: `border-color:${m.color || '#ff9900'};padding:16px;` },
         h('h2', { style: 'margin:0 0 6px;' }, `Secret Word: ${m.word}`),
-        h('p', { style: 'margin:0 0 12px;color:#99ccff;' }, `Category: ${m.cat}`),
+        h('p', { style: 'margin:0 0 6px;color:#99ccff;' }, `Category: ${m.cat}`),
+        reqLetter && h('p', { style: 'margin:0 0 12px;color:#ff9900;font-weight:700;' }, `Rule: Clue 1 must start with "${reqLetter}"`),
         h('div.lcars-clues-form', {}, ...inputs, err, btn)
       )
     );

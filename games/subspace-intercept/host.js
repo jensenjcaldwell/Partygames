@@ -671,12 +671,15 @@ export default async function (ctx) {
 
     const targetByPlayer = new Map();
     const cluesByPlayer = new Map();
+    const REQ_LETTERS = 'ABCDEFGHILMNOPRSTW';
+    const stopClueClock = ctx.clock(65);
     await new Promise((resolve) => {
       let done = false;
       const finish = () => {
         if (done) return;
         done = true;
         clearTimeout(timer);
+        stopClueClock?.();
         resolve();
       };
       const timer = setTimeout(finish, 65000);
@@ -692,9 +695,10 @@ export default async function (ctx) {
       });
       players.forEach((p) => {
         const target = nextWord();
+        const reqLetter = REQ_LETTERS[Math.floor(Math.random() * REQ_LETTERS.length)];
         targetByPlayer.set(p.id, target);
         const t = teams.find((tm) => tm.members.some((m) => m.id === p.id));
-        ctx.send(p, { mode: 'threeClues', word: target.word, cat: target.cat, color: t.color });
+        ctx.send(p, { mode: 'threeClues', word: target.word, cat: target.cat, reqLetter, color: t.color });
       });
     });
     players.forEach((p) => {
@@ -730,7 +734,7 @@ export default async function (ctx) {
 
       const pickAns = await ctx.ask(borgP, {
         title: `BORG INTERCEPT (${victim.name})`,
-        text: `Category: ${vTarget.cat}\nPick ONE clue to assimilate:`,
+        text: `Target Word: "${vTarget.word}" (${vTarget.cat})\nPick ONE clue to assimilate:`,
         color: '#39ff14',
         buzz: true,
         choices: vClues.map((c, i) => ({ label: `${i + 1}. ${c}`, value: i })),
@@ -741,7 +745,7 @@ export default async function (ctx) {
 
       const replaceAns = await ctx.ask(borgP, {
         title: 'ASSIMILATE CLUE',
-        text: `Replacing "${originalWord}" — enter 1 misleading word:`,
+        text: `Target Word: "${vTarget.word}"\nReplacing "${originalWord}" — enter 1 misleading word:`,
         color: '#39ff14',
         input: { placeholder: 'Misleading word...', max: 24, submit: 'Assimilate' },
       }, {
@@ -784,13 +788,44 @@ export default async function (ctx) {
       const { chosenIdx, originalWord, fakeWord, finalClues } = sabo;
 
       borgAlert = false;
-      statusText = 'DECODE SIGNAL';
+      statusText = 'AWAITING GUESSER';
       footerText = `${team.name.toUpperCase()} • ${sender.name.toUpperCase()} → ${guessers.map((g) => g.name.toUpperCase()).join(' & ')}`;
+      renderScreen([
+        h('div.stage-kicker', {}, `${team.name} • CATEGORY: ${target.cat.toUpperCase()}`),
+        h('div.stage-title', {}, `${guessers.map((g) => g.name).join(' & ')}: READY TO DECODE?`),
+        h('div.stage-sub', {}, 'Tap Ready on your phone to reveal the 3 clues and start the 30-second decode timer!'),
+        h('div.clue-grid', {},
+          h('div.clue-card.encrypted', {}, h('div.clue-label', {}, 'MARKER 01'), h('div.clue-word', {}, '•••')),
+          h('div.clue-card.encrypted', {}, h('div.clue-label', {}, 'MARKER 02'), h('div.clue-word', {}, '•••')),
+          h('div.clue-card.encrypted', {}, h('div.clue-label', {}, 'MARKER 03'), h('div.clue-word', {}, '•••'))
+        ),
+      ]);
+      ctx.show(sender, {
+        title: `Answer: ${target.word}`,
+        text: `Waiting for ${guessers.map((g) => g.name).join(' & ')} to tap Ready…`,
+        color: team.color,
+      });
+      ctx.show(opp.members, {
+        title: `${team.name} Decoding`,
+        text: `Waiting for ${guessers.map((g) => g.name).join(' & ')} to start their 30s decode…`,
+        color: opp.color,
+      });
+      if (guessers.length) {
+        await ctx.ask(guessers[0], {
+          title: `Decode ${sender.name}'s Word (${target.cat})`,
+          text: 'Tap Ready when you are looking at the screen to reveal the clues and start the 30s timer!',
+          color: team.color,
+          buzz: true,
+          choices: [{ label: '▶ Ready to Decode (30s)', value: 'ready' }],
+        }, { timeout: 60, clock: false });
+      }
+
+      statusText = 'DECODE SIGNAL (30s)';
       playVoice('sf_decode');
       renderScreen([
         h('div.stage-kicker', {}, `${team.name} • CATEGORY: ${target.cat.toUpperCase()}`),
         h('div.stage-title', {}, `${guessers.map((g) => g.name).join(' & ')}: DECODE ${sender.name}'S WORD`),
-        h('div.stage-sub', {}, 'Say your guess out loud! One of these three clues was overwritten by the Borg.'),
+        h('div.stage-sub', {}, 'You have 30 seconds! Say your guess out loud. One of these three clues was overwritten by the Borg.'),
         h('div.clue-grid', {},
           ...finalClues.map((c, i) =>
             h('div.clue-card', {},
@@ -803,12 +838,12 @@ export default async function (ctx) {
 
       ctx.show(guessers, {
         title: `Decode ${sender.name}'s Word (${target.cat})`,
-        text: `Clues: ${finalClues.join('  •  ')}\n\nSay your guess out loud to ${sender.name}!`,
+        text: `Clues: ${finalClues.join('  •  ')}\n\n30 seconds — say your guess out loud to ${sender.name}!`,
         color: team.color,
         buzz: true,
       });
       ctx.show(opp.members, {
-        title: `${team.name} Decoding`,
+        title: `${team.name} Decoding (30s)`,
         text: `Listen to ${guessers.map((g) => g.name).join(' & ')} guess "${target.word}"!`,
         wait: 'Waiting for result...',
         color: opp.color,
@@ -816,13 +851,13 @@ export default async function (ctx) {
 
       const judgeAns = await ctx.ask(sender, {
         title: `Answer: ${target.word}`,
-        text: `Clues shown: ${finalClues.join(' • ')}\nDid your crewmate say "${target.word}" out loud?`,
+        text: `Clues shown: ${finalClues.join(' • ')}\nDid your crewmate say "${target.word}" out loud within 30s?`,
         color: team.color,
         choices: [
           { label: '✓ Confirmed (Correct!)', value: 'hit' },
-          { label: '✕ Signal Lost (Wrong)', value: 'miss' },
+          { label: '✕ Signal Lost (Wrong / Time Up)', value: 'miss' },
         ],
-      }, { timeout: 90, clock: false });
+      }, { timeout: 30 });
 
       const isHit = judgeAns.get(sender.id) === 'hit';
 
