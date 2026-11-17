@@ -1,38 +1,38 @@
 [
   {
-    "title": "Two hidden masks",
-    "text": "Everyone holds two hidden masks. Each mask has a power.",
+    "title": "Two hidden cards",
+    "text": "Everyone holds two hidden cards. Each card has a power.",
     "scene": [
       {
-        "card": "\ud83d\udc51 Patron",
+        "card": "\ud83d\udc51 Duke",
         "color": "#f2c14e"
       },
       {
-        "card": "\ud83e\uddea Poisoner",
+        "card": "\ud83e\uddea Assassin",
         "color": "#8cc084"
       },
       {
-        "card": "\ud83d\udddd\ufe0f Pickpocket",
+        "card": "\ud83d\udddd\ufe0f Captain",
         "color": "#b8a1e3"
       },
       {
-        "card": "\ud83d\udee1\ufe0f Bodyguard",
+        "card": "\ud83d\udee1\ufe0f Contessa",
         "color": "#e8553d"
       }
     ],
     "audio": "audio/tut_1.wav",
-    "ms": 5260
+    "ms": 6180
   },
   {
     "title": "Claim any power",
-    "text": "On your turn, use any mask's power, whether you're wearing it or not.",
+    "text": "On your turn, use any card's power, whether you hold it or not.",
     "scene": [
       {
         "phone": "Your turn",
         "buttons": [
-          "Fund: take 3 gold",
-          "Lift: take 2 gold",
-          "Poison"
+          "Tax: take 3 coins",
+          "Steal: take 2 coins",
+          "Assassinate"
         ],
         "tap": 0
       },
@@ -41,7 +41,7 @@
       }
     ],
     "audio": "audio/tut_2.wav",
-    "ms": 6220
+    "ms": 4980
   },
   {
     "title": "Call it out",

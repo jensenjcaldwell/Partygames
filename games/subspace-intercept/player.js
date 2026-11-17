@@ -50,6 +50,7 @@ export default function (ctx) {
 
   ctx.on('message', (m) => {
     if (!m || m.mode !== 'threeClues') return;
+    if (navigator.vibrate) navigator.vibrate([80, 40, 80]);
     const h = ctx.h;
     const reqLetter = (m.reqLetter || '').toUpperCase();
     const inputs = [1, 2, 3].map((n) =>

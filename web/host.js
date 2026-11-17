@@ -88,6 +88,7 @@ async function picker(err) {
 }
 
 function create(g) {
+  run?.finish();
   game = g;
   players.clear();
   sock?.close();
@@ -215,6 +216,7 @@ function lobby() {
 const shown = new Set();
 
 function quit() {
+  run?.finish();
   stopLobbyAudio();
   sock?.send({ t: 'close' });
   sock?.close(); sock = null; room = null; run = null;
@@ -289,7 +291,11 @@ function makeRun() {
     sfx: (name, delay) => audio.sfx(name, delay),
     /** Background music: 'lobby', 'party', 'think', 'tense', or null for silence. */
     music: (mood) => audio.music(mood),
-    on(ev, fn) { (handlers[ev] ||= []).push(fn); },
+    on(ev, fn) {
+      const wrapped = (...args) => { if (!r.ended) return fn(...args); };
+      (handlers[ev] ||= []).push(wrapped);
+      return () => { handlers[ev] = (handlers[ev] || []).filter((f) => f !== wrapped); };
+    },
     send(to, data) { live(); sock.send({ t: 'send', to: to === 'all' ? 'all' : ids(to), data }); },
     broadcast(data) { ctx.send('all', data); },
     /** Show a view on phones. `to` = 'all', a player, an id, or a list. */
@@ -324,8 +330,9 @@ function makeRun() {
           reject,
         };
         asks.set(id, a);
-        for (const pid of who) views.set(pid, { ...view, ask: id });
-        sock.send({ t: 'send', to: who, data: { kind: 'view', view: { ...view, ask: id } } });
+        const askView = { ...view, buzz: view.buzz ?? true, ask: id };
+        for (const pid of who) views.set(pid, askView);
+        sock.send({ t: 'send', to: who, data: { kind: 'view', view: askView } });
         if (opts.timeout) {
           if (opts.clock !== false) a.stopClock = clock(opts.timeout);
           a.timer = setTimeout(a.done, opts.timeout * 1000);
