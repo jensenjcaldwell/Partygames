@@ -21,7 +21,7 @@ export default async function (ctx) {
   ctx.music(null); // Mute generic platform music
   let bgm = null;
   try {
-    bgm = new Audio(ctx.asset('audio/bg_loop.wav'));
+    bgm = new Audio(ctx.asset('audio/bg_main.ogg'));
     bgm.loop = true;
     bgm.volume = 0.35;
     if (!audio.isMuted()) {

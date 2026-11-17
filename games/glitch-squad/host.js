@@ -27,7 +27,7 @@ export default async function (ctx) {
     if (bgm) return;
     try {
       ctx.music(null); // Mute generic platform synthesizer
-      bgm = new Audio(ctx.asset('audio/bg_loop.wav'));
+      bgm = new Audio(ctx.asset('audio/bg_main.ogg'));
       bgm.loop = true;
       const isMuted = () => {
         try { return localStorage.getItem('partyhall.muted') === '1'; } catch { return false; }

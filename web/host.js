@@ -70,21 +70,36 @@ new MutationObserver(queueFit).observe(app, { childList: true, subtree: true, ch
 addEventListener('resize', queueFit);
 
 // ---------- game picker ----------
+let pickerNavHandler = null;
 async function picker(err) {
   keepAwake(false);
+  stopGameMusic();
   audio.music(null);
   try { games = await (await fetch('/api/games')).json(); } catch { games = []; }
+  const cards = games.map((g) => h('button.gcard', {
+    onclick: () => { audio.unlock(); create(g); },
+    style: { '--accent': g.color || '#7d8cff' },
+  }, h('div.gicon', g.icon || '🎲'), h('h3', g.name || g.id, g.inspiredBy && h('span.inspired', ` (${g.inspiredBy})`)), h('p', g.description || ''),
+    h('span.tag', `${g.minPlayers || 1}–${g.maxPlayers || 16} players`)));
   app.replaceChildren(h('div.picker',
     h('h1.logo', 'Party', h('span', 'Hall')),
     err && h('p.err', err),
     h('p.sub', 'Pick a game. Everyone else joins on their phone.'),
-    h('div.grid', games.map((g) => h('button.gcard', {
-      onclick: () => { audio.unlock(); create(g); },
-      style: { '--accent': g.color || '#7d8cff' },
-    }, h('div.gicon', g.icon || '🎲'), h('h3', g.name || g.id, g.inspiredBy && h('span.inspired', ` (${g.inspiredBy})`)), h('p', g.description || ''),
-      h('span.tag', `${g.minPlayers || 1}–${g.maxPlayers || 16} players`)))),
+    h('div.grid', cards),
     !games.length && h('p', 'No games found. Add a folder to the games directory.'),
   ));
+  if (pickerNavHandler) document.removeEventListener('keydown', pickerNavHandler);
+  pickerNavHandler = (e) => {
+    if (!app.querySelector('.picker') || !cards.length) return;
+    const idx = cards.indexOf(document.activeElement);
+    const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowDown' ? 3 : e.key === 'ArrowUp' ? -3 : 0;
+    if (!step) return;
+    e.preventDefault();
+    const next = idx < 0 ? 0 : Math.max(0, Math.min(cards.length - 1, idx + step));
+    cards[next].focus();
+    cards[next].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  };
+  document.addEventListener('keydown', pickerNavHandler);
 }
 
 function create(g) {
@@ -225,6 +240,34 @@ function quit() {
 }
 
 // ---------- running a game ----------
+let gameMusic = null, gameMusicKey = null;
+function stopGameMusic() {
+  if (gameMusic) { gameMusic.pause(); gameMusic = null; gameMusicKey = null; }
+}
+function playGameMusic(g, mood) {
+  if (!mood) { stopGameMusic(); audio.music(null); return; }
+  const track = mood === 'tense' ? 'bg_finale.ogg' : 'bg_main.ogg';
+  const key = `${g?.id}/${track}`;
+  if (gameMusicKey === key) {
+    if (gameMusic) { gameMusic.volume = audio.getMusicVol() * 0.7; gameMusic.muted = audio.isMuted(); }
+    return;
+  }
+  stopGameMusic();
+  if (!g?.id) { audio.music(mood); return; }
+  gameMusicKey = key;
+  const a = new Audio(`/games/${g.id}/audio/${track}?v=${g.version || ''}`);
+  a.loop = true;
+  a.volume = audio.getMusicVol() * 0.7;
+  a.muted = audio.isMuted();
+  a.onerror = () => { if (gameMusic === a) { stopGameMusic(); audio.music(mood); } };
+  a.play().then(() => { if (gameMusic === a) audio.music(null); }).catch(() => {});
+  gameMusic = a;
+}
+audio.onAudioChange(() => {
+  if (lobbyAudio) { lobbyAudio.volume = audio.getMusicVol() * 0.7; lobbyAudio.muted = audio.isMuted(); }
+  if (gameMusic) { gameMusic.volume = audio.getMusicVol() * 0.7; gameMusic.muted = audio.isMuted(); }
+});
+
 async function start() {
   if (!game.lateJoin) sock.send({ t: 'lock', locked: true });
   // Re-read the list so an edited game is picked up without a page reload.
@@ -241,8 +284,8 @@ async function start() {
   }
   run = makeRun();
   audio.sfx('start');
-  audio.music(game.music || 'party');
   stopLobbyAudio();
+  playGameMusic(game, game.music || 'party');
   const fn = mod.default || mod.host;
   try {
     await fn(run.ctx);
@@ -260,10 +303,12 @@ async function start() {
 const ENDED = new Error('game ended');
 
 function makeRun() {
+  const headBefore = new Set(document.head.children);
   const handlers = {};
   const views = new Map(); // id -> last view
   const asks = new Map();
   const timers = new Set();
+  const timeouts = new Set();
   let askSeq = 0;
   const stage = h('div.stage');
   const bar = h('div.hostbar',
@@ -290,7 +335,9 @@ function makeRun() {
     /** Play a sound effect: tick, tock, pop, join, ding, whoosh, start, win, lose, buzz, glitch, timeup. */
     sfx: (name, delay) => audio.sfx(name, delay),
     /** Background music: 'lobby', 'party', 'think', 'tense', or null for silence. */
-    music: (mood) => audio.music(mood),
+    music: (mood) => !r.ended && playGameMusic(game, mood),
+    setTimeout: (fn, ms) => { const t = setTimeout(() => { timeouts.delete(t); if (!r.ended) fn(); }, ms); timeouts.add(t); return t; },
+    setInterval: (fn, ms) => { const t = setInterval(() => { if (!r.ended) fn(); }, ms); timers.add(t); return t; },
     on(ev, fn) {
       const wrapped = (...args) => { if (!r.ended) return fn(...args); };
       (handlers[ev] ||= []).push(wrapped);
@@ -412,9 +459,14 @@ function makeRun() {
     finish() {
       if (r.ended) return;
       r.ended = true;
+      stopGameMusic();
       for (const a of asks.values()) { clearTimeout(a.timer); a.stopClock?.(); a.reject(ENDED); }
       asks.clear();
       timers.forEach(clearInterval);
+      timeouts.forEach(clearTimeout);
+      for (const el of [...document.head.children]) {
+        if (!headBefore.has(el) && (el.tagName === 'STYLE' || el.tagName === 'LINK')) el.remove();
+      }
       sock.send({ t: 'send', to: 'all', data: { kind: 'view', view: { wait: 'Back in the lobby…' } } });
       sock.send({ t: 'lock', locked: false });
       run = null;

@@ -29,7 +29,7 @@ export default async function (ctx) {
   const startBgm = () => {
     if (bgm) return;
     try {
-      bgm = new Audio(ctx.asset('audio/bg_loop.wav'));
+      bgm = new Audio(ctx.asset('audio/bg_main.ogg'));
       bgm.loop = true;
       bgm.volume = isMuted() ? 0 : 0.35;
       bgm.play().catch(() => {});

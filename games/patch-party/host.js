@@ -40,7 +40,7 @@ class PatchAudio {
     try {
       this.ctx.music(null);
       if (!this.bgm) {
-        this.bgm = new Audio(this.ctx.asset('audio/bg_loop.wav'));
+        this.bgm = new Audio(this.ctx.asset('audio/bg_main.ogg'));
         this.bgm.loop = true;
         this.bgm.volume = this.isMuted() ? 0 : 0.35;
       }

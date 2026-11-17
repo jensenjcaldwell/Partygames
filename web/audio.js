@@ -8,6 +8,9 @@
 let ac = null, master, sfxBus, musicBus, noiseBuf;
 let muted = false;
 let musicVol = 0.5, sfxVol = 0.7;
+const listeners = new Set();
+const notify = () => listeners.forEach((fn) => { try { fn(); } catch {} });
+export function onAudioChange(fn) { listeners.add(fn); return () => listeners.delete(fn); }
 try { muted = localStorage.getItem('partyhall.muted') === '1'; } catch {}
 try { const mv = parseFloat(localStorage.getItem('partyhall.musicVol')); if (!isNaN(mv)) musicVol = Math.max(0, Math.min(1, mv)); } catch {}
 try { const sv = parseFloat(localStorage.getItem('partyhall.sfxVol')); if (!isNaN(sv)) sfxVol = Math.max(0, Math.min(1, sv)); } catch {}
@@ -38,18 +41,21 @@ export function setMuted(m) {
   muted = m;
   try { localStorage.setItem('partyhall.muted', m ? '1' : '0'); } catch {}
   if (ac) master.gain.setTargetAtTime(m ? 0 : 1, ac.currentTime, 0.05);
+  notify();
 }
 export const getMusicVol = () => musicVol;
 export function setMusicVol(v) {
   musicVol = Math.max(0, Math.min(1, Number(v)));
   try { localStorage.setItem('partyhall.musicVol', String(musicVol)); } catch {}
   if (musicBus) musicBus.gain.setTargetAtTime(musicVol * 0.45, ac.currentTime, 0.05);
+  notify();
 }
 export const getSfxVol = () => sfxVol;
 export function setSfxVol(v) {
   sfxVol = Math.max(0, Math.min(1, Number(v)));
   try { localStorage.setItem('partyhall.sfxVol', String(sfxVol)); } catch {}
   if (sfxBus) sfxBus.gain.setTargetAtTime(sfxVol * 0.8, ac.currentTime, 0.05);
+  notify();
 }
 
 const ready = () => ac && ac.state === 'running';

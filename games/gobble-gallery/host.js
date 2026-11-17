@@ -51,7 +51,7 @@ export default async function (ctx) {
   // Custom audio & BGM engine
   ctx.music?.(null);
   const muted = () => { try { return localStorage.getItem('partyhall.muted') === '1'; } catch { return false; } };
-  const bgm = new Audio(ctx.asset('audio/bg_loop.wav'));
+  const bgm = new Audio(ctx.asset('audio/bg_main.ogg'));
   bgm.loop = true;
   bgm.volume = 0.35;
   const playBgm = () => {
