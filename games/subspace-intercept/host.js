@@ -1,3 +1,4 @@
+import * as audio from '/sdk/audio.js';
 import { OVERRIDE_CODES, TRANSMISSIONS } from './words.js';
 
 const VOICE_GROUPS = {
@@ -457,6 +458,27 @@ function injectStyles() {
       background: #99ccff;
       border-radius: 0 0 1.0em 0;
     }
+    .status-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45em;
+      justify-content: center;
+      max-width: 44em;
+    }
+    .status-chip {
+      padding: 0.25em 0.7em;
+      border-radius: 999px;
+      border: 1px solid #475569;
+      background: #0d1220;
+      color: #94a3b8;
+      font-size: 0.82em;
+      font-weight: 700;
+    }
+    .status-chip.done {
+      border-color: #39ff14;
+      color: #39ff14;
+      background: rgba(57, 255, 20, 0.12);
+    }
   `;
   document.head.appendChild(s);
 }
@@ -478,6 +500,7 @@ export default async function (ctx) {
   const lastVoice = new Map();
   let currentAudio = null;
   function playVoice(group) {
+    if (audio.isMuted()) return;
     const list = VOICE_GROUPS[group];
     if (!list || !list.length) return;
     let pick = list[Math.floor(Math.random() * list.length)];
@@ -491,7 +514,7 @@ export default async function (ctx) {
         currentAudio.currentTime = 0;
       }
       currentAudio = new Audio(ctx.asset(`audio/${pick}`));
-      currentAudio.volume = 0.95;
+      currentAudio.volume = Math.max(0.1, audio.getSfxVol());
       currentAudio.play().catch(() => {});
     } catch {}
   }
@@ -672,6 +695,18 @@ export default async function (ctx) {
     const targetByPlayer = new Map();
     const cluesByPlayer = new Map();
     const REQ_LETTERS = 'ABCDEFGHILMNOPRSTW';
+    const renderClueProgress = () => renderScreen([
+      h('div.subspace-wave', {}, h('span', {}), h('span', {}), h('span', {}), h('span', {}), h('span', {}), h('span', {}), h('span', {})),
+      h('div.stage-kicker', {}, `CYCLE ${round} • PHASE 1: SIMULTANEOUS TRANSMISSION`),
+      h('div.stage-title', {}, 'EVERYONE: TRANSMIT 3 CLUES'),
+      h('div.stage-sub', {}, 'Check your phone! Clue 1 must start with your assigned letter.'),
+      h('div.status-chips', {},
+        ...players.map((p) => h('div', { class: `status-chip${cluesByPlayer.has(p.id) ? ' done' : ''}` },
+          `${cluesByPlayer.has(p.id) ? '✓' : '⏳'} ${p.name}`
+        ))
+      ),
+    ]);
+    renderClueProgress();
     const stopClueClock = ctx.clock(65);
     await new Promise((resolve) => {
       let done = false;
@@ -682,12 +717,13 @@ export default async function (ctx) {
         stopClueClock?.();
         resolve();
       };
-      const timer = setTimeout(finish, 65000);
+      const timer = ctx.setTimeout(finish, 65000);
       const unsub = ctx.on('message', (p, data) => {
         if (done || !data || !Array.isArray(data.clues)) return;
         const clean = data.clues.slice(0, 3).map((w) => String(w || '').trim().split(/\s+/)[0] || 'REDACTED');
         while (clean.length < 3) clean.push('REDACTED');
         cluesByPlayer.set(p.id, clean);
+        renderClueProgress();
         if (cluesByPlayer.size >= players.length) {
           unsub?.();
           finish();
@@ -727,6 +763,20 @@ export default async function (ctx) {
     });
 
     const saboBySender = new Map();
+    const borgDone = new Set();
+    const renderBorgProgress = () => renderScreen([
+      h('div.scanline-overlay', {}),
+      h('div.borg-reticle', {}, 'BORG'),
+      h('div.stage-kicker', { style: 'color:#39ff14' }, 'WARNING // MASS SUBSPACE INTRUSION'),
+      h('div.stage-title', { style: 'color:#39ff14' }, 'EVERYONE: ASSIMILATE AN ENEMY CLUE'),
+      h('div.stage-sub', {}, 'Pick 1 clue on your phone and overwrite it with a misleading decoy word!'),
+      h('div.status-chips', {},
+        ...players.map((p) => h('div', { class: `status-chip${borgDone.has(p.id) ? ' done' : ''}` },
+          `${borgDone.has(p.id) ? '✓' : '⏳'} ${p.name}`
+        ))
+      ),
+    ]);
+    renderBorgProgress();
     await Promise.all(players.map(async (borgP) => {
       const victim = assignments.get(borgP.id);
       const vTarget = targetByPlayer.get(victim.id);
@@ -745,7 +795,7 @@ export default async function (ctx) {
 
       const replaceAns = await ctx.ask(borgP, {
         title: 'ASSIMILATE CLUE',
-        text: `Target Word: "${vTarget.word}"\nReplacing "${originalWord}" — enter 1 misleading word:`,
+        text: `Target Word: "${vTarget.word}"\nReplacing "${originalWord}" — enter 1 misleading word (not the target!):`,
         color: '#39ff14',
         input: { placeholder: 'Misleading word...', max: 24, submit: 'Assimilate' },
       }, {
@@ -753,10 +803,13 @@ export default async function (ctx) {
         after: { title: 'Assimilated', text: 'Disinformation injected.', wait: 'Waiting for other Borg...' },
       });
 
-      const fakeWord = (replaceAns.get(borgP.id) || 'CUBE').trim().split(/\s+/)[0] || 'CUBE';
+      let fakeWord = (replaceAns.get(borgP.id) || 'CUBE').trim().split(/\s+/)[0] || 'CUBE';
+      if (fakeWord.toLowerCase() === vTarget.word.toLowerCase()) fakeWord = 'DECOY';
       const finalClues = [...vClues];
       finalClues[chosenIdx] = fakeWord;
       saboBySender.set(victim.id, { borgP, chosenIdx, originalWord, fakeWord, finalClues });
+      borgDone.add(borgP.id);
+      renderBorgProgress();
     }));
 
     ctx.sfx('glitch');
@@ -849,6 +902,8 @@ export default async function (ctx) {
         color: opp.color,
       });
 
+      const stopDecodeClock = ctx.clock(30);
+      const buzzTimer = ctx.setTimeout(() => ctx.sfx('timeup'), 30000);
       const judgeAns = await ctx.ask(sender, {
         title: `Answer: ${target.word}`,
         text: `Clues shown: ${finalClues.join(' • ')}\nDid your crewmate say "${target.word}" out loud within 30s?`,
@@ -857,7 +912,9 @@ export default async function (ctx) {
           { label: '✓ Confirmed (Correct!)', value: 'hit' },
           { label: '✕ Signal Lost (Wrong / Time Up)', value: 'miss' },
         ],
-      }, { timeout: 30 });
+      }, { timeout: 40, clock: false });
+      clearTimeout(buzzTimer);
+      stopDecodeClock?.();
 
       const isHit = judgeAns.get(sender.id) === 'hit';
 

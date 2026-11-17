@@ -1,54 +1,98 @@
 [
   {
     "title": "Step 1: Two Starfleet Teams",
-    "text": "Welcome to Subspace Intercept. You are divided into Team Alpha and Team Beta. Each team must crack a five-letter Starfleet override code.",
-    "audio": "audio/tut_1.wav",
-    "ms": 9200,
+    "text": "Welcome to Subspace Intercept. You are divided into Team Alpha and Team Beta. Each team must crack a five-letter override code.",
     "scene": [
-      { "icon": "🖖", "label": "Team Alpha: ? ? ? ? ?", "fx": "pop" },
-      { "icon": "⚡", "label": "VS" },
-      { "icon": "🛡️", "label": "Team Beta: ? ? ? ? ?", "fx": "pop" }
-    ]
+      {
+        "icon": "\ud83d\udd96",
+        "label": "Team Alpha: ? ? ? ? ?",
+        "fx": "pop"
+      },
+      {
+        "icon": "\u26a1",
+        "label": "VS"
+      },
+      {
+        "icon": "\ud83d\udee1\ufe0f",
+        "label": "Team Beta: ? ? ? ? ?",
+        "fx": "pop"
+      }
+    ],
+    "audio": "audio/tut_1.wav",
+    "ms": 12180
   },
   {
     "title": "Step 2: Transmit Three Clues",
-    "text": "Each cycle, one Sender receives a secret word and transmits three one-word clues to their crewmates.",
-    "audio": "audio/tut_2.wav",
-    "ms": 7500,
+    "text": "Each round, everyone gets a secret word and writes three one-word clues. Clue one must start with your assigned letter.",
     "scene": [
-      { "phone": "Secret Word: Warp Core", "type": "antimatter engine fast", "label": "Sender" }
-    ]
+      {
+        "phone": "Secret Word: Lighthouse",
+        "type": "beacon ocean tall",
+        "label": "Clue 1 starts with B"
+      }
+    ],
+    "audio": "audio/tut_2.wav",
+    "ms": 11060
   },
   {
     "title": "Step 3: Borg Assimilation",
-    "text": "Before your crewmates see them, an opposing Borg operative assimilates one clue, replacing it with a decoy word.",
-    "audio": "audio/tut_3.wav",
-    "ms": 7500,
+    "text": "Next, an opposing Borg operative sees your secret word and overwrites one of your three clues with a misleading decoy.",
     "scene": [
-      { "card": "antimatter", "color": "#ff9900", "label": "Marker 01" },
-      { "card": "engine", "back": "POTATO", "color": "#39ff14", "label": "Assimilated!", "fx": "shake" },
-      { "card": "fast", "color": "#ff9900", "label": "Marker 03" }
-    ]
+      {
+        "card": "beacon",
+        "color": "#ff9900",
+        "label": "Marker 01"
+      },
+      {
+        "card": "ocean",
+        "back": "DESERT",
+        "color": "#39ff14",
+        "label": "Assimilated!",
+        "fx": "shake"
+      },
+      {
+        "card": "tall",
+        "color": "#ff9900",
+        "label": "Marker 03"
+      }
+    ],
+    "audio": "audio/tut_3.wav",
+    "ms": 10140
   },
   {
-    "title": "Step 4: Call It Out & Crack the Code",
-    "text": "Your crewmates call out their guess in person! If correct, reveal one letter of your code—or risk your turn to guess all five letters at once.",
-    "audio": "audio/tut_4.wav",
-    "ms": 9500,
+    "title": "Step 4: Ready Up & 30s Decode",
+    "text": "Tap Ready on your phone to reveal the clues and start the thirty-second timer. Call out your guess in person to unlock a code letter\u2014or risk it all to guess all five!",
     "scene": [
-      { "tv": "WARP CORE!", "sub": "Transmission confirmed" },
-      { "score": "A _ P _ _", "label": "1 letter or all 5!", "fx": "pop" }
+      {
+        "tv": "LIGHTHOUSE!",
+        "sub": "30s Decode"
+      },
+      {
+        "score": "A _ P _ _",
+        "label": "1 letter or all 5!",
+        "fx": "pop"
+      }
     ],
-    "flow": true
+    "flow": true,
+    "audio": "audio/tut_4.wav",
+    "ms": 13300
   },
   {
     "title": "Step 5: Signal Lost",
-    "text": "If you miss, the opposing team unlocks a letter instead. First team to complete their override code wins!",
-    "audio": "audio/tut_5.wav",
-    "ms": 7500,
+    "text": "If time runs out or you miss, the opposing team unlocks a letter instead. First team to complete their override code wins!",
     "scene": [
-      { "icon": "🚨", "label": "Miss = Enemy advances", "fx": "pulse" },
-      { "icon": "🏆", "label": "Crack 5 letters to win", "fx": "float" }
-    ]
+      {
+        "icon": "\ud83d\udea8",
+        "label": "Miss = Enemy advances",
+        "fx": "pulse"
+      },
+      {
+        "icon": "\ud83c\udfc6",
+        "label": "Crack 5 letters to win",
+        "fx": "float"
+      }
+    ],
+    "audio": "audio/tut_5.wav",
+    "ms": 9340
   }
 ]
