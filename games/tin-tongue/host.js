@@ -37,9 +37,7 @@ export default async function (ctx) {
   function playSfx(name, vol = 0.7) {
     if (audio.isMuted()) return;
     try {
-      const sfx = new Audio(ctx.asset(`audio/${name}.wav`));
-      sfx.volume = vol;
-      sfx.play().catch(() => {});
+      ctx.playSfx(`audio/${name}.wav`, vol);
     } catch (e) {}
   }
 
@@ -164,7 +162,7 @@ export default async function (ctx) {
       const log = [];
       let card = null, dealtAt = 0, moodTimer = null;
       const endAt = Date.now() + TURN_TIME * 1000;
-      const mood = (m) => { setFace(m); clearTimeout(moodTimer); moodTimer = setTimeout(() => setFace('talk'), 1300); };
+      const mood = (m) => { setFace(m); clearTimeout(moodTimer); moodTimer = ctx.setTimeout(() => setFace('talk'), 1300); };
       const refresh = () => {
         const got = log.filter((c) => c.result === 'got');
         const net = log.reduce((s, c) => s + (c.result === 'got' ? c.points : c.result === 'glitch' ? -1 : 0), 0);

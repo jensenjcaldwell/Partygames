@@ -31,9 +31,7 @@ export default async function (ctx) {
   const playSfx = (name, vol = 0.55) => {
     if (isMuted()) return;
     try {
-      const a = new Audio(ctx.asset(`audio/${name}.wav`));
-      a.volume = vol;
-      a.play().catch(() => {});
+      ctx.playSfx(`audio/${name}.wav`, vol);
     } catch {}
   };
 
@@ -80,7 +78,7 @@ export default async function (ctx) {
     render();
   };
   const push = (pid) => { sendMe(pid, true); ctx.send(pid, { t: 'pub', s: game.view(), secs: secsLeft() }); };
-  const pushAll = () => { if (!flushT) flushT = setTimeout(() => { try { flush(); } catch {} }, 150); };
+  const pushAll = () => { if (!flushT) flushT = ctx.setTimeout(() => { try { flush(); } catch {} }, 150); };
 
   const apply = (pid, m, auto = false) => {
     playBgm();

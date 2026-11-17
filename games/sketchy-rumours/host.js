@@ -210,7 +210,7 @@ export default async function (ctx) {
       next: (p) => { if (p.id === owner.id) advance?.(); },
       react: (p, e) => {
         const f = h('span.sr-fly', { style: { left: `${10 + Math.random() * 80}%`, '--x': `${Math.random() * 80 - 40}px` } }, e);
-        fx.append(f); setTimeout(() => f.remove(), 2600);
+        fx.append(f); ctx.setTimeout(() => f.remove(), 2600);
         const key = p.id;
         if (current) current.reacts = current.reacts || {};
         if (current && current.by.id !== p.id && (current.reacts[key] = (current.reacts[key] || 0) + 1) <= 3) {
@@ -234,7 +234,7 @@ export default async function (ctx) {
       // The owner flips pages; if they don't, the notebook flips itself.
       const wait = (pg.type === 'draw' ? 12000 : 8000) + (last ? 3000 : 0);
       await new Promise((resolve) => {
-        const t = setTimeout(resolve, wait);
+        const t = ctx.setTimeout(resolve, wait);
         advance = () => { clearTimeout(t); resolve(); };
       });
       advance = null;

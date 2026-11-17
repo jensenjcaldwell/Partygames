@@ -33,7 +33,7 @@ export default async function (ctx) {
       bgm.loop = true;
       bgm.volume = isMuted() ? 0 : 0.35;
       bgm.play().catch(() => {});
-      setInterval(() => {
+      ctx.setInterval(() => {
         if (bgm) bgm.muted = isMuted();
       }, 250);
     } catch {}
@@ -41,9 +41,7 @@ export default async function (ctx) {
   const playClip = (name, vol = 0.7) => {
     if (isMuted()) return;
     try {
-      const a = new Audio(ctx.asset(`audio/${name}.wav`));
-      a.volume = vol;
-      a.play().catch(() => {});
+      ctx.playSfx(`audio/${name}.wav`, vol);
     } catch {}
   };
   startBgm();
@@ -133,7 +131,7 @@ export default async function (ctx) {
     bloom.classList.remove('active');
     void bloom.offsetWidth;
     bloom.classList.add('active');
-    setTimeout(() => bloom.classList.remove('active'), 1400);
+    ctx.setTimeout(() => bloom.classList.remove('active'), 1400);
   };
 
   const place = (x) => { tok[x.id].style.transform = `translate(${x.x * T}px, ${x.y * T}px)`; };

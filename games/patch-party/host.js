@@ -210,7 +210,7 @@ export default async function (ctx) {
     ctx.show('all', { wait: 'Look at the TV!' });
     for (const [i, pt] of shown.entries()) {
       snd.sfx('sewing_buzz.wav', 0.6);
-      setTimeout(() => snd.sfx('steam_press.wav', 0.8), 350);
+      ctx.setTimeout(() => snd.sfx('steam_press.wav', 0.8), 350);
       ctx.el.replaceChildren(
         h('h2', 'Fresh off the machine…'),
         h('div.pp-solo', patchEl(pt, i, null, { solo: true, pressed: true }))

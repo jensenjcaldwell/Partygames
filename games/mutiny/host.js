@@ -99,7 +99,7 @@ export default async function (ctx) {
   const joinWaiters = new Map(); // player id -> resolve
   ctx.on('join', (p) => { const w = p && joinWaiters.get(p.id); if (w) { joinWaiters.delete(p.id); w(); } });
   const waitForJoin = (p, ms) => new Promise((res) => {
-    const t = setTimeout(() => { joinWaiters.delete(p.id); res(); }, Math.max(0, ms));
+    const t = ctx.setTimeout(() => { joinWaiters.delete(p.id); res(); }, Math.max(0, ms));
     joinWaiters.set(p.id, () => { clearTimeout(t); res(); });
   });
 

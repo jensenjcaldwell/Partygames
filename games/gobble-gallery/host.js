@@ -66,9 +66,7 @@ export default async function (ctx) {
   const playSfx = (file, vol = 0.6) => {
     if (muted()) return;
     try {
-      const a = new Audio(ctx.asset(`audio/${file}`));
-      a.volume = vol;
-      a.play().catch(() => {});
+      ctx.playSfx(`audio/${file}`, vol);
     } catch {}
   };
 
@@ -454,7 +452,7 @@ export default async function (ctx) {
     const reacted = new Map();
     reacting = (p, e) => {
       const f = h('span.gg-fly', { style: { left: `${8 + Math.random() * 84}%`, '--x': `${Math.random() * 80 - 40}px` } }, e);
-      fx.append(f); setTimeout(() => f.remove(), 2600);
+      fx.append(f); ctx.setTimeout(() => f.remove(), 2600);
       if (p.id !== a.by.phone.id) {
         const nTimes = (reacted.get(p.id) || 0) + 1;
         reacted.set(p.id, nTimes);

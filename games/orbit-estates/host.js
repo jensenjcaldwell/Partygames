@@ -190,7 +190,7 @@ export default async function (ctx) {
   idle(null);
   render();
   await ctx.sleep(500);
-  const ticker = setInterval(() => { if (game.limitMs) render(); }, 15000);
+  const ticker = ctx.setInterval(() => { if (game.limitMs) render(); }, 15000);
   let standings;
   try {
     ctx.music('party');

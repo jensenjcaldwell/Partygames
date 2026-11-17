@@ -124,7 +124,7 @@ export default async function (ctx) {
       h('footer.sf-footer', h('span', 'INDEPENDENT THOUGHT / SHARED FREQUENCY'), h('span', 'EST. RIGHT NOW'))));
     // Coalesce a roomful of simultaneous guesses below the relay's 20/s
     // message limit. Public rendering remains immediate; phones update <800ms.
-    if (!phoneTimer) phoneTimer = setTimeout(sendPhones, Math.max(0, 800 - (Date.now() - lastPhoneUpdate)));
+    if (!phoneTimer) phoneTimer = ctx.setTimeout(sendPhones, Math.max(0, 800 - (Date.now() - lastPhoneUpdate)));
   }
   ctx.on('message', (p, data) => {
     if (data?.type !== 'sf-action' || data.match !== s.match) return;

@@ -51,9 +51,7 @@ export default async function (ctx) {
   function playSfx(name, vol = 0.8) {
     try {
       if (localStorage.getItem('partyhall.muted') === '1') return;
-      const sfx = new Audio(ctx.asset(`audio/${name}.wav`));
-      sfx.volume = vol;
-      sfx.play().catch(() => {});
+      ctx.playSfx(`audio/${name}.wav`, vol);
     } catch {
       // Graceful fallback to platform synthesizer
       if (name === 'crt_degauss') ctx.sfx('whoosh');
@@ -109,7 +107,7 @@ export default async function (ctx) {
         const idx = players.findIndex((q) => q.id === p.id);
         if (cards[idx]) {
           cards[idx].classList.add('gs-jitter');
-          setTimeout(() => cards[idx].classList.remove('gs-jitter'), 280);
+          ctx.setTimeout(() => cards[idx].classList.remove('gs-jitter'), 280);
         }
       };
 
@@ -166,7 +164,7 @@ export default async function (ctx) {
           playSfx('terminal_click');
           tally.textContent = `[TRANSMISSIONS: ${voted.size} / ${players.length} VOTES LOGGED]`;
           tally.classList.add('gs-jitter');
-          setTimeout(() => tally.classList.remove('gs-jitter'), 250);
+          ctx.setTimeout(() => tally.classList.remove('gs-jitter'), 250);
         },
       })));
       stopVote();

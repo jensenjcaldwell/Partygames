@@ -110,7 +110,7 @@ export default async function (ctx) {
           { style: { '--c': p.color } }, (done.has(p.id) ? '✓ ' : '') + p.name))))));
     board();
     // A nudge 3 s before time so phones submit whatever they have.
-    const hurry = setTimeout(() => {
+    const hurry = ctx.setTimeout(() => {
       const late = players.filter((p) => !done.has(p.id)).map((p) => p.id);
       try { if (late.length) ctx.send(late, { kind: 'hurry' }); } catch {}
     }, (BUILD_TIME - 3) * 1000);

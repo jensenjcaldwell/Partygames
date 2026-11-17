@@ -279,7 +279,7 @@ export default async function (ctx) {
 
   function over(winner, reason) {
     S.phase = 'over'; S.winner = winner; S.reason = reason;
-    setTimeout(() => sfx('win'), 700);
+    ctx.setTimeout(() => sfx('win'), 700);
     sync();
   }
 

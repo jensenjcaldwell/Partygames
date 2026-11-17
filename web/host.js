@@ -333,7 +333,17 @@ function makeRun() {
     player: (id) => players.get(id),
     asset: (p) => `/games/${game.id}/${p}`,
     /** Play a sound effect: tick, tock, pop, join, ding, whoosh, start, win, lose, buzz, glitch, timeup. */
-    sfx: (name, delay) => audio.sfx(name, delay),
+    sfx: (name, delay) => !r.ended && audio.sfx(name, delay),
+    /** Play a custom audio file from the game folder, respecting TV mute & SFX volume. */
+    playSfx: (path, vol = 1) => {
+      if (r.ended || audio.isMuted()) return null;
+      try {
+        const a = new Audio(`/games/${game.id}/${path}?v=${game.version || ''}`);
+        a.volume = Math.max(0, Math.min(1, audio.getSfxVol() * vol));
+        a.play().catch(() => {});
+        return a;
+      } catch { return null; }
+    },
     /** Background music: 'lobby', 'party', 'think', 'tense', or null for silence. */
     music: (mood) => !r.ended && playGameMusic(game, mood),
     setTimeout: (fn, ms) => { const t = setTimeout(() => { timeouts.delete(t); if (!r.ended) fn(); }, ms); timeouts.add(t); return t; },

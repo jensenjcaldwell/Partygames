@@ -326,7 +326,7 @@ export default async function (ctx) {
   function flash(msg) {
     S.flash = msg;
     clearTimeout(S.flashT);
-    S.flashT = setTimeout(() => { S.flash = null; if (S.phase === 'round') drawRound(); }, 5000);
+    S.flashT = ctx.setTimeout(() => { S.flash = null; if (S.phase === 'round') drawRound(); }, 5000);
   }
 
   function viewFor(id) {

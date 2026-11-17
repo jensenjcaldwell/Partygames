@@ -32,9 +32,7 @@ export default async function (ctx) {
   function playSfx(name, vol = 0.7) {
     if (audio.isMuted()) return;
     try {
-      const sfx = new Audio(ctx.asset(`audio/${name}.wav`));
-      sfx.volume = vol;
-      sfx.play().catch(() => {});
+      ctx.playSfx(`audio/${name}.wav`, vol);
     } catch (e) {}
   }
 
@@ -140,10 +138,10 @@ export default async function (ctx) {
           el.style.transition = 'transform 1.1s cubic-bezier(.6,0,.9,.6), opacity 1.1s';
           el.style.transform = `translate(${x}px, ${G + 80}px) rotate(200deg)`;
           el.classList.add('gone');
-          setTimeout(() => el.remove(), 1200);
+          ctx.setTimeout(() => el.remove(), 1200);
         } else {
           el.classList.add('gone');
-          setTimeout(() => el.remove(), 550);
+          ctx.setTimeout(() => el.remove(), 550);
         }
       }
       for (const [key, w] of want) {
@@ -175,7 +173,7 @@ export default async function (ctx) {
       const b = h('div.pf-cheer', { style: { '--pc': p.color, left: `${8 + Math.random() * 70}%` } }, `${p.name}: ${text}`);
       cheers.append(b);
       ctx.sfx('pop');
-      setTimeout(() => b.remove(), 2700);
+      ctx.setTimeout(() => b.remove(), 2700);
     });
     const cheerView = (name) => ({
       title: `${name} is climbing`, text: 'Shout at them:',
