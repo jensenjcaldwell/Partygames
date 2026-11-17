@@ -297,7 +297,36 @@ async function start() {
     }
   }
   if (!run || run.ended) return;
+  const replay = await askPlayAgain(run);
+  if (!run || run.ended) return;
   run.finish();
+  if (replay) start();
+}
+
+async function askPlayAgain(r) {
+  const first = [...players.values()].find((p) => p.connected);
+  const res = await Promise.race([
+    new Promise((resolve) => {
+      const bar = h('div.replay-bar',
+        h('button.big', { onclick: () => resolve(true) }, '↻ Play Again (Same Players)'),
+        h('button.ghost', { onclick: () => resolve(false) }, 'Back to Lobby'));
+      r.ctx.el.append(bar);
+      if (first) {
+        r.ctx.ask([first.id], {
+          lobby: true,
+          title: `${game?.name || 'Game'} Over`,
+          text: 'Play again with the same players?',
+          color: game?.color,
+          choices: [
+            { label: '↻ Play Again (Same Players)', value: 'replay' },
+            { label: 'Back to Lobby', value: 'lobby' },
+          ],
+        }, { timeout: 15, clock: false, progress: false }).then((m) => resolve(m.get(first.id) === 'replay')).catch(() => resolve(false));
+      }
+    }),
+    sleep(15000).then(() => false),
+  ]);
+  return res;
 }
 
 const ENDED = new Error('game ended');
@@ -374,14 +403,27 @@ function makeRun() {
       const who = ids(to);
       const answers = new Map();
       const after = opts.after || { wait: 'Got it! Look at the big screen.' };
+      const showProg = who.length > 1 && opts.progress !== false;
+      const progEl = showProg ? h('div.ask-progress') : null;
+      const drawProg = () => {
+        if (!progEl) return;
+        progEl.replaceChildren(...who.map((pid) => {
+          const p = players.get(pid);
+          const ok = answers.has(pid);
+          return h('span.ask-chip' + (ok ? '.done' : ''), `${ok ? '✓' : '⏳'} ${p?.name || ''}`);
+        }));
+        if (!progEl.isConnected && stage.isConnected) stage.append(progEl);
+      };
       return new Promise((resolve, reject) => {
         const a = {
           who, answers, after, opts,
           done: () => {
+            progEl?.remove();
             asks.delete(id); clearTimeout(a.timer); if (a.stopClock) a.stopClock();
             resolve(answers);
           },
           check: () => {
+            drawProg();
             if (who.every((pid) => answers.has(pid) || !players.get(pid)?.connected)) a.done();
           },
           reject,
@@ -390,6 +432,7 @@ function makeRun() {
         const askView = { ...view, buzz: view.buzz ?? true, ask: id };
         for (const pid of who) views.set(pid, askView);
         sock.send({ t: 'send', to: who, data: { kind: 'view', view: askView } });
+        drawProg();
         if (opts.timeout) {
           if (opts.clock !== false) a.stopClock = clock(opts.timeout);
           a.timer = setTimeout(a.done, opts.timeout * 1000);

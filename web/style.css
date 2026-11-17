@@ -251,7 +251,13 @@ body.tv .tag { font-size: .8em; padding: 4px 12px; }
 .timer { flex: 1; text-align: center; font-size: 2em; font-weight: 900; color: var(--fg); font-variant-numeric: tabular-nums; }
 .timer.urgent { color: var(--err); animation: pulse .5s ease-in-out infinite alternate; }
 @keyframes pulse { to { transform: scale(1.15); } }
-.game .stage { min-height: 0; overflow: hidden; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 3vh; }
+.game .stage { min-height: 0; overflow: hidden; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 3vh; position: relative; }
+.ask-progress { position: absolute; bottom: .6em; left: 50%; transform: translateX(-50%); display: flex; flex-wrap: wrap; gap: .4em; justify-content: center;
+  max-width: 92%; padding: .35em .65em; border-radius: 999px; background: rgba(15, 13, 24, .82); border: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(6px); z-index: 20; pointer-events: none; }
+.ask-chip { font-size: .78em; font-weight: 800; padding: .18em .55em; border-radius: 999px; color: #a9a2c8; background: rgba(255,255,255,.06); }
+.ask-chip.done { color: #102a1d; background: #5df08a; }
+.replay-bar { display: flex; gap: 1em; align-items: center; justify-content: center; padding: .7em 1.2em; border-radius: 1em;
+  background: rgba(20, 17, 31, .92); border: 2px solid var(--accent, #7d8cff); margin-top: .8em; }
 .say h1 { font-size: 3.2em; }
 .say p { font-size: 1.4em; color: var(--dim); }
 

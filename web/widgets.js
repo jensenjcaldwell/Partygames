@@ -15,6 +15,12 @@
 // }
 import { h } from './common.js';
 
+const IDEAS = [
+  'A raccoon in a tuxedo', 'Extra-spicy pickles', 'Three-legged disco', 'Soggy cereal',
+  'An overly polite ghost', 'Microwave burrito', 'A tiny inflatable crown', 'Emergency glitter',
+  'Suspiciously loud slippers', 'A confused pigeon', 'Pocket spaghetti', 'Reverse gravity',
+];
+
 export function renderView(el, view, send) {
   el.replaceChildren();
   if (!view) { el.append(waiting('Waiting for the host…')); return; }
@@ -36,8 +42,15 @@ export function renderView(el, view, send) {
     });
     const go = () => { const v = field.value.trim(); if (v) answer(v); };
     field.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !i.multiline) { e.preventDefault(); go(); } });
+    const ideaBtn = i.suggest === false ? null : h('button.ghost.sm', {
+      type: 'button',
+      onclick: () => {
+        field.value = IDEAS[Math.floor(Math.random() * IDEAS.length)];
+        field.focus();
+      },
+    }, '🎲 Need an idea?');
     box.append(h('form.stack', { onsubmit: (e) => { e.preventDefault(); go(); } },
-      field, h('button.big', { type: 'submit' }, i.submit || 'Send')));
+      field, h('button.big', { type: 'submit' }, i.submit || 'Send'), ideaBtn));
     setTimeout(() => field.focus(), 50);
   }
 

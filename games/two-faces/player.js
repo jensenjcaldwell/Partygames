@@ -20,10 +20,10 @@ export default function (ctx) {
       h('div.tfp-bar',
         h('span.tfp-gold', hand.out ? 'Out of the ball' : `🪙 ${hand.gold} gold`),
         h('button.tfp-btn', { onclick: togglePeek }, peek ? 'Hide' : 'Peek'),
-        h('button.tfp-btn', { onclick: () => { help = !help; drawHand(); } }, help ? 'Close' : 'Masks?')),
+        h('button.tfp-btn', { onclick: () => { help = !help; drawHand(); } }, help ? 'Close' : 'Cards?')),
       help && h('div.tfp-help', Object.values(ROLES).map((r) => h('div',
         h('b', { style: { color: r.color } }, `${r.icon} ${r.name}`), ' ', [r.does, r.blocks].filter(Boolean).join(' ')))),
-      help && h('p.tfp-small', 'Anyone: Mingle +1 gold · Beg a Favor +2 gold · Unmask: pay 7, a rival drops a mask (must at 10 gold).'),
+      help && h('p.tfp-small', 'Anyone: Income +1 coin · Foreign Aid +2 coins · Coup: pay 7, a rival loses a card (must at 10 coins).'),
     ].filter(Boolean));
   }
 
